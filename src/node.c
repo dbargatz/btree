@@ -1,6 +1,5 @@
 #include "node.h"
 #include <stdlib.h>
-#include <stdio.h> // TODO: remove
 
 node_t * node_create(uint16_t inOrder) {
     node_t * node;
@@ -33,7 +32,6 @@ void node_insert(node_t * inNode, uint64_t inKey, uint64_t inValue) {
     int i = inNode->numKeys - 1;
 
     if(node_is_leaf(inNode)) {
-        printf("node_insert leaf\n");
         while(i >= 0 && inKey < inNode->keys[i]) {
             inNode->keys[i+1] = inNode->keys[i];
             i--;
@@ -43,7 +41,6 @@ void node_insert(node_t * inNode, uint64_t inKey, uint64_t inValue) {
         inNode->values[i] = inValue;
         inNode->numKeys++;
     } else {
-        printf("node_insert internal\n");
         while(i >= 0 && inKey < inNode->keys[i]) {
             i--;
         }
@@ -91,5 +88,37 @@ search_result_t node_search(node_t * inNode, uint64_t inKey) {
 }
 
 void node_split_child(node_t * inParent, uint16_t inSplitIndex) {
-    printf("TODO: Split not implemented.\n");
+    int j;
+    int t = (inParent->order / 2);
+    node_t * left = inParent->children[inSplitIndex];
+    node_t * right = node_create(inParent->order);
+    if(node_is_leaf(left)) {
+        right->children[0] = NULL;
+    }
+
+    right->numKeys = t - 1;
+    for(j = 0; j < t - 1; j++) {
+        right->keys[j] = left->keys[j + t];
+        right->values[j] = left->values[j + t];
+    }
+
+    if(!node_is_leaf(left)) {
+        for(j = 0; j <= t - 1; j++) {
+            right->children[j] = left->children[j + t];
+        }
+    }
+
+    left->numKeys = t - 1;
+    for(j = inParent->numKeys + 1; j > inSplitIndex + 1; j--) {
+        inParent->children[j+1] = inParent->children[j];
+    }
+    inParent->children[inSplitIndex+1] = right;
+
+    for(j = inParent->numKeys; j > inSplitIndex; j--) {
+        inParent->keys[j+1] = inParent->keys[j];
+        inParent->values[j+1] = inParent->values[j];
+    }
+    inParent->keys[inSplitIndex] = left->keys[t-1];
+    inParent->values[inSplitIndex] = left->values[t-1];
+    inParent->numKeys++;
 }
