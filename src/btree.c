@@ -21,6 +21,7 @@ void btree_insert(btree_t * inTree, uint64_t inKey, uint64_t inValue) {
         root = node_create(inTree->order);
         root->children[0] = inTree->root;
         inTree->root = root;
+        inTree->height++;
         node_split_child(root, 0);
         node_insert(root, inKey, inValue);
     } else {
