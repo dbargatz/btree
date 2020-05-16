@@ -9,11 +9,10 @@
         "ms-vscode.cpptools",
         "ms-vsliveshare.vsliveshare"
     ],
-    // Fully update the container, then install and configure the necessary
+    // Ensure pip is installed, then install and configure the necessary
     // tools, libraries, and dependencies.
     "postCreateCommand": [
-        "sudo apt -y update &&",
-        "sudo apt -y upgrade &&", 
+        "sudo apt -y install python3-pip &&",
         "/bin/bash ./configure"
     ]
 }
