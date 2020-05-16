@@ -1,6 +1,9 @@
 # Meson/Ninja build output directory
 /build/
 
+# VSCode root directory
+/.vscode/
+
 # Prerequisites
 *.d
 
