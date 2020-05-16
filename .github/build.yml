@@ -1,0 +1,27 @@
+name: Build
+
+# Run the build on every push and pull request.
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    # Checkout the repository under $GITHUB_WORKSPACE.
+    - uses: actions/checkout@v2
+
+    # Install the necessary tools and dependencies for the build.
+    - name: Run ./configure
+      run: ./configure
+
+    # Actually perform the build.
+    - name: Run the build
+      run: cd build/ && ninja
+
+    # Run the unit tests.
+    - name: Run tests
+      run: meson test
