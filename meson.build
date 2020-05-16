@@ -4,4 +4,6 @@ src = ['src/btree.c', 'src/node.c']
 lib = static_library('btree', src, name_prefix: '', name_suffix: 'static', 
                      pic: true)
 
-executable('btree_test', 'test/main.c', link_with: lib)
+test = executable('btree_test', 'test/main.c', link_with: lib)
+
+test('initial', test)
