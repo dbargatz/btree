@@ -16,7 +16,7 @@ jobs:
 
     # Install the necessary tools and dependencies for the build.
     - name: Run ./configure
-      run: ./configure
+      run: ./configure && export PATH=~/.local/bin:$PATH
 
     # Actually perform the build.
     - name: Run the build
