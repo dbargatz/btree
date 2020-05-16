@@ -3,10 +3,10 @@
 # Installs the tools, libraries, and dependencies needed to build and test 
 # btree. This was hand-written, not generated with autoconf/autotools.
 
-# Upgrade pip if necessary, then install/upgrade Meson and Ninja to the latest
+# Upgrade pip3 if necessary, then install/upgrade Meson and Ninja to the latest
 # versions available.
-pip install --user --upgrade pip
-pip install --user --upgrade meson ninja
+pip3 install --user --upgrade pip3
+pip3 install --user --upgrade meson ninja
 
 # (Re-)Generate the Meson build into the "build" subdirectory.
 meson setup --wipe build
