@@ -8,5 +8,5 @@
 pip3 install --user --upgrade pip
 pip3 install --user --upgrade meson ninja
 
-# (Re-)Generate the Meson build into the "build" subdirectory.
-meson setup --wipe build
+# Generate the Meson build into the "build" subdirectory.
+meson setup build
