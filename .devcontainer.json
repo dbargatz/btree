@@ -1,0 +1,18 @@
+{
+    // Install various VSCode extensions to make development in VSCode and
+    // Codespaces more pleasant.
+    "extensions": [
+        "austin.code-gnu-global",
+        "davidanson.vscode-markdownlint",
+        "github.vscode-pull-request-github",
+        "ms-vscode.azure-account",
+        "ms-vscode.cpptools",
+        "ms-vsliveshare.vsliveshare",
+    ],
+    // Fully update the container, then install and configure the necessary
+    // tools, libraries, and dependencies.
+    "postCreateCommand": [
+        "apt-get update && apt-get upgrade", 
+        "/bin/bash ./configure"
+    ]
+}
