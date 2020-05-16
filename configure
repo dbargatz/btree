@@ -7,3 +7,6 @@
 # versions available.
 pip install --user --upgrade pip
 pip install --user --upgrade meson ninja
+
+# Generate the Meson build into the "build" subdirectory.
+meson setup build
