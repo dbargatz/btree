@@ -5,7 +5,7 @@
 
 # Upgrade pip3 if necessary, then install/upgrade Meson and Ninja to the latest
 # versions available.
-pip3 install --user --upgrade pip3
+pip3 install --user --upgrade pip
 pip3 install --user --upgrade meson ninja
 
 # (Re-)Generate the Meson build into the "build" subdirectory.
