@@ -12,7 +12,8 @@
     // Fully update the container, then install and configure the necessary
     // tools, libraries, and dependencies.
     "postCreateCommand": [
-        "apt-get update && apt-get upgrade", 
+        "sudo apt -y update &&",
+        "sudo apt -y upgrade &&", 
         "/bin/bash ./configure"
     ]
 }
