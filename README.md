@@ -9,11 +9,11 @@ An implementation of a B-Tree in C.
 ```bash
 > ./configure
 > meson setup build
-> cd build/ && ninja
+> meson compile -C build/
 ```
 
 ## Testing
 
 ```bash
-> cd build/ && meson test
+> meson test -C build/
 ```
