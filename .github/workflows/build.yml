@@ -10,6 +10,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      PATH: ~/.local/bin:$PATH
     steps:
     # Checkout the repository under $GITHUB_WORKSPACE.
     - uses: actions/checkout@v2
@@ -19,11 +21,6 @@ jobs:
     # up in ~/.local/bin, which is not on the $PATH.
     - name: Run ./configure
       run: ./configure
-
-    # To make sure the following steps can use meson/ninja, prepend their 
-    # install path to the current path.
-    - name: Put ~/.local/bin on PATH
-      run: export PATH=~/.local/bin:$PATH
 
     # Generate the ninja build files with meson.
     - name: Generate build
