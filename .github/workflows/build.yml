@@ -10,6 +10,12 @@ jobs:
     # Checkout the repository under $GITHUB_WORKSPACE.
     - uses: actions/checkout@v2
 
+    # Update Python to a fixed version to avoid changes with Python/pip breaking
+    # the build.
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
     # To make sure the following steps can use meson/ninja, prepend their 
     # install path to the current path using the "add-path" workflow command.
     # See: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#adding-a-system-path
