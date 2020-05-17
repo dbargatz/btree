@@ -2,7 +2,7 @@
 #include "../src/btree.h"
 
 MunitResult order_lt_2_fails(const MunitParameter inParams[], void * inFixture) {
-    int order = munit_rand_int_range(-65535, 1);
+    uint16_t order = (uint16_t)munit_rand_int_range(0, 1);
     if(NULL != btree_create(order)) {
         return MUNIT_FAIL;
     }
@@ -10,7 +10,7 @@ MunitResult order_lt_2_fails(const MunitParameter inParams[], void * inFixture) 
 }
 
 MunitResult order_gte_2_succeeds(const MunitParameter inParams[], void * inFixture) {
-    int order = munit_rand_int_range(2, 65535);
+    uint16_t order = (uint16_t)munit_rand_int_range(2, 65535);
     if(NULL == btree_create(order)) {
         return MUNIT_FAIL;
     }
@@ -18,7 +18,7 @@ MunitResult order_gte_2_succeeds(const MunitParameter inParams[], void * inFixtu
 }
 
 MunitResult order_gt_65535_fails(const MunitParameter inParams[], void * inFixture) {
-    int order = munit_rand_int_range(65536, INT32_MAX-1);
+    uint16_t order = (uint16_t)munit_rand_int_range(65536, INT32_MAX-1);
     if(NULL != btree_create(order)) {
         return MUNIT_FAIL;
     }
@@ -26,7 +26,7 @@ MunitResult order_gt_65535_fails(const MunitParameter inParams[], void * inFixtu
 }
 
 MunitResult root_exists(const MunitParameter inParams[], void * inFixture) {
-    int order = munit_rand_int_range(2, 65535);
+    uint16_t order = (uint16_t)munit_rand_int_range(2, 65535);
     btree_t * tree = btree_create(order);
 
     if(NULL == tree->root) {
@@ -36,7 +36,7 @@ MunitResult root_exists(const MunitParameter inParams[], void * inFixture) {
 }
 
 MunitResult root_is_leaf(const MunitParameter inParams[], void * inFixture) {
-    int order = munit_rand_int_range(2, 65535);
+    uint16_t order = (uint16_t)munit_rand_int_range(2, 65535);
     btree_t * tree = btree_create(order);
 
     if(NULL != tree->root->children[0]) {
@@ -46,7 +46,7 @@ MunitResult root_is_leaf(const MunitParameter inParams[], void * inFixture) {
 }
 
 MunitResult root_is_empty(const MunitParameter inParams[], void * inFixture) {
-    int order = munit_rand_int_range(2, 65535);
+    uint16_t order = (uint16_t)munit_rand_int_range(2, 65535);
     btree_t * tree = btree_create(order);
 
     if(0 != tree->root->numKeys) {

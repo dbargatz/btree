@@ -2,6 +2,10 @@
 #include <stdlib.h>
 
 btree_t * btree_create(uint16_t inOrder) {
+    if(inOrder < BTREE_MIN_ORDER || inOrder > BTREE_MAX_ORDER) {
+        return NULL;
+    }
+
     node_t * root = node_create(inOrder);
     btree_t * tree = malloc(sizeof(btree_t));
     tree->height = 0;
