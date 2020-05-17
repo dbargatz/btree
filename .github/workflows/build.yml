@@ -13,6 +13,10 @@ jobs:
     env:
       PATH: ~/.local/bin:$PATH
     steps:
+    # Echo-debug the PATH.
+    - name: Where is PATH-me? Is she safe? Is she...alright?
+      run: echo $PATH
+
     # Checkout the repository under $GITHUB_WORKSPACE.
     - uses: actions/checkout@v2
 
