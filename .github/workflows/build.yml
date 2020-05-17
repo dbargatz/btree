@@ -15,7 +15,7 @@ jobs:
     # install path to the current path using the "add-path" workflow command.
     # Documentation: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#adding-a-system-path
     - name: Put ~/.local/bin on PATH
-      run: echo "::add-path::~/.local/bin"
+      run: echo "::add-path::/home/runner/.local/bin"
     
     # Echo-debug the PATH.
     - name: Where is PATH-me? Is she safe? Is she...alright?
