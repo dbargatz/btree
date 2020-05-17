@@ -1,11 +1,7 @@
 name: Build
 
-# Run the build on every push and pull request.
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+# Run the build on every push and pull request, regardless of branch.
+on: [push, pull_request]
 
 jobs:
   build:
