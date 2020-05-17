@@ -14,14 +14,25 @@ jobs:
     # Checkout the repository under $GITHUB_WORKSPACE.
     - uses: actions/checkout@v2
 
-    # Install the necessary tools and dependencies for the build.
+    # Install the necessary tools and dependencies for the build. Note that
+    # pip installs meson/ninja for the current user only, meaning they end
+    # up in ~/.local/bin, which is not on the $PATH.
     - name: Run ./configure
-      run: export PATH=~/.local/bin:$PATH && ./configure
+      run: ./configure
+
+    # To make sure the following steps can use meson/ninja, prepend their 
+    # install path to the current path.
+    - name: Put ~/.local/bin on PATH
+      run: export PATH=~/.local/bin:$PATH
+
+    # Generate the ninja build files with meson.
+    - name: Generate build
+      run: meson setup build
 
     # Actually perform the build.
     - name: Run the build
-      run: export PATH=~/.local/bin:$PATH && cd build/ && ninja
+      run: cd build/ && ninja
 
     # Run the unit tests.
     - name: Run tests
-      run: export PATH=~/.local/bin:$PATH && cd build/ && meson test
+      run: cd build/ && meson test
