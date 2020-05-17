@@ -2,7 +2,8 @@
 #include "../src/btree.h"
 
 static void * test_setup(const MunitParameter inParams[], void * inFixture) {
-    return btree_create(4);
+    uint16_t order = (uint16_t)atoi(inParams[0].value);
+    return btree_create(order);
 }
 
 static void test_teardown(void * inFixture) {
@@ -27,11 +28,17 @@ MunitResult test_split(const MunitParameter inParams[], void * inFixture) {
     return MUNIT_OK;
 }
 
-MunitTest tests[] = {
-    { "/test_split", test_split, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL },
+static char* order_params[] = { "1", "2", "3", "4", "8", "32", "1000", NULL };
+static MunitParameterEnum test_params[] = {
+    { "order", order_params },
+    { NULL, NULL }
 };
 
-static const MunitSuite suite = { "/btree", tests, NULL, 1, MUNIT_SUITE_OPTION_NONE };
+MunitTest tests[] = {
+    { "/test_split", test_split, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, test_params },
+};
+
+static const MunitSuite suite = { "/btree", tests, NULL, 100, MUNIT_SUITE_OPTION_NONE };
 
 int main(int argc, char * const argv[]) {
     return munit_suite_main(&suite, NULL, argc, argv);
