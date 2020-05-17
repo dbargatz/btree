@@ -20,8 +20,8 @@ jobs:
 
     # Actually perform the build.
     - name: Run the build
-      run: cd build/ && ninja
+      run: export PATH=~/.local/bin:$PATH && cd build/ && ninja
 
     # Run the unit tests.
     - name: Run tests
-      run: meson test
+      run: export PATH=~/.local/bin:$PATH && cd build/ && meson test
