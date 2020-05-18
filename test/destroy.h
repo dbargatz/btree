@@ -1,7 +1,7 @@
 #include "../subprojects/munit/munit.h"
 
-MunitResult destroy_null_succeeds(const MunitParameter inParams[], void * inFixture);
-MunitResult destroy_valid_succeeds(const MunitParameter inParams[], void * inFixture);
-MunitResult destroy_null_root_succeeds(const MunitParameter inParams[], void * inFixture);
+MunitResult null_tree_succeeds(const MunitParameter inParams[], void * inFixture);
+MunitResult valid_tree_succeeds(const MunitParameter inParams[], void * inFixture);
+MunitResult null_root_succeeds(const MunitParameter inParams[], void * inFixture);
 
 extern MunitTest destroy_tests[];
