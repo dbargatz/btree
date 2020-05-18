@@ -4,6 +4,7 @@
 MunitTest destroy_tests[] = {
     { "/destroy_null_succeeds", destroy_null_succeeds, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
     { "/destroy_valid_succeeds", destroy_valid_succeeds, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
+    { "/destroy_null_root_succeeds", destroy_null_root_succeeds, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 };
 
@@ -23,6 +24,23 @@ MunitResult destroy_valid_succeeds(const MunitParameter inParams[], void * inFix
         // Return error because create failed, but we're testing destroy.
         return MUNIT_ERROR;
     }
+    // There's nothing we can do if this fails, so assume if it doesn't crash
+    // we're good.
+    btree_destroy(tree);
+    return MUNIT_OK;
+}
+
+MunitResult destroy_null_root_succeeds(const MunitParameter inParams[], void * inFixture) {
+    // Rather than use btree_create(), just allocate a btree_t struct and 
+    // populate it with wacky data/NULL for root.
+    btree_t * tree = munit_malloc(sizeof(btree_t));
+    if(NULL == tree) {
+        // Return error because malloc failed, but we're testing destroy.
+        return MUNIT_ERROR;
+    }
+    tree->height = (uint16_t)munit_rand_int_range(0, 65535);
+    tree->order = (uint16_t)munit_rand_int_range(2, 65535);
+    tree->root = NULL;
     // There's nothing we can do if this fails, so assume if it doesn't crash
     // we're good.
     btree_destroy(tree);
