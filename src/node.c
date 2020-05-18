@@ -19,6 +19,11 @@ node_t * node_create(uint16_t inOrder) {
 
 void node_destroy(node_t * inNode) {
     int i;
+
+    if(NULL == inNode) {
+        return;
+    }
+
     if(!node_is_leaf(inNode)) {
         for(i = 0; i <= inNode->numKeys; i++) {
             node_destroy(inNode->children[i]);
