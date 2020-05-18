@@ -15,6 +15,9 @@ btree_t * btree_create(uint16_t inOrder) {
 }
 
 void btree_destroy(btree_t * inTree) {
+    if(NULL == inTree) {
+        return;
+    }
     node_destroy(inTree->root);
     free(inTree);
 }
