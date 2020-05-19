@@ -1,11 +1,12 @@
 #include "node.h"
 #include <stdlib.h>
+#include <string.h>
 
 node_t * node_create(uint16_t inOrder) {
     node_t * node;
-    uint16_t keyLength = sizeof(*node->keys) * (inOrder-1);
-    uint16_t valLength = sizeof(*node->values) * (inOrder-1);
-    uint16_t childrenLength = sizeof(*node->children) * inOrder;
+    uint64_t keyLength = sizeof(*node->keys) * (inOrder-1);
+    uint64_t valLength = sizeof(*node->values) * (inOrder-1);
+    uint64_t childrenLength = sizeof(*node->children) * inOrder;
     node = malloc(sizeof(node_t) + keyLength + valLength + childrenLength);
 
     node->numKeys = 0;
@@ -13,7 +14,7 @@ node_t * node_create(uint16_t inOrder) {
     node->keys = (uint64_t *)(((uint8_t *)node) + sizeof(node_t));
     node->values = (uint64_t *)(((uint8_t *)node->keys) + keyLength);
     node->children = (node_t **)(((uint8_t *)node->values) + valLength);
-    node->children[0] = NULL;
+    memset(node->children, 0, childrenLength);
     return node;
 }
 
