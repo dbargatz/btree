@@ -31,6 +31,7 @@ MunitResult null_tree_returns_invalid (const MunitParameter inParams[], void * i
 {
     uint64_t value = btree_search(NULL, search_rand_uint64(RANDOM_KEY_MIN, RANDOM_KEY_MAX));
     munit_assert_uint64(value, ==, INVALID_KEY_VALUE_SENTINEL);
+    return MUNIT_OK;
 }
 
 MunitResult not_found_returns_invalid (const MunitParameter inParams[], void * inFixture)
