@@ -71,7 +71,11 @@ bool node_is_leaf(node_t * inNode) {
 
 search_result_t node_search(node_t * inNode, uint64_t inKey) {
     int i;
-    search_result_t result;
+    search_result_t result = { .node = NULL, .valueIndex = 0 };
+
+    if(NULL == inNode || INVALID_KEY_VALUE_SENTINEL == inKey) {
+        return result;
+    }
 
     for(i = 0; i < inNode->numKeys; i++) {
         if(inKey == inNode->keys[i]) {
@@ -85,8 +89,6 @@ search_result_t node_search(node_t * inNode, uint64_t inKey) {
 
     // If this is a leaf node, return an empty result.
     if(NULL == inNode->children[0]) {
-        result.node = NULL;
-        result.valueIndex = 0;
         return result;
     } else {
         return node_search(inNode->children[i], inKey);
