@@ -3,16 +3,12 @@
 
 #include "node.h"
 
-#define BTREE_MIN_ORDER (2)
-#define BTREE_MAX_ORDER (65535)
-
 typedef struct _btree {
-    uint16_t height;
-    uint16_t order;
-    node_t * root;
+    uint16_t t;
+    node_t * r;
 } btree_t;
 
-btree_t * btree_create(uint16_t inOrder);
+btree_t * btree_create(uint16_t t);
 void btree_destroy(btree_t * inTree);
 void btree_insert(btree_t * inTree, uint64_t inKey, uint64_t inValue);
 uint64_t btree_search(const btree_t * inTree, uint64_t inKey);

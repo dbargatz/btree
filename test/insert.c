@@ -18,33 +18,33 @@ uint64_t rand_uint64(void) {
 
 bool node_valid(node_t * inNode, bool inShouldBeLeaf) {
     int i;
-    for(i = 0; i < inNode->numKeys; i++) {
-        if(inShouldBeLeaf && NULL != inNode->children[i]) {
+    for(i = 0; i < inNode->n; i++) {
+        if(inShouldBeLeaf && NULL != inNode->c[i]) {
             munit_error("Node was not a leaf");
             return false;
-        } else if(!inShouldBeLeaf && NULL == inNode->children[i]) {
+        } else if(!inShouldBeLeaf && NULL == inNode->c[i]) {
             munit_errorf("Expected non-leaf node child[%d] was NULL, despite having %d keys", 
-                         i, inNode->numKeys);
+                         i, inNode->n);
             return false;
-        } else if(i < inNode->numKeys - 1 && inNode->keys[i] >= inNode->keys[i+1]) {
+        } else if(i < inNode->n - 1 && inNode->k[i] >= inNode->k[i+1]) {
             munit_errorf("Node[%d] (0x%016"PRIX64") >= Node[%d] (0x%016"PRIX64")", 
-                          i, inNode->keys[i], i+1, inNode->keys[i+1]);
+                          i, inNode->k[i], i+1, inNode->k[i+1]);
             return false;
         }
     }
 
     // Check the last child.
-    if(!inShouldBeLeaf && NULL == inNode->children[inNode->numKeys]) {
+    if(!inShouldBeLeaf && NULL == inNode->c[inNode->n]) {
         munit_errorf("Expected non-leaf node child[%d] was NULL, despite having %d keys", 
-                    i, inNode->numKeys);
+                    i, inNode->n);
         return false;
     }
 
     // Ensure the unused children are NULL.
-    for(i = inNode->numKeys+1; i < inNode->order; i++) {
-        if(NULL != inNode->children[i]) {
+    for(i = inNode->n+1; i < (2 * inNode->t); i++) {
+        if(NULL != inNode->c[i]) {
             munit_errorf("Node child[%d] was not NULL, despite having only %d keys", 
-                         i, inNode->numKeys);
+                         i, inNode->n);
             return false;
         }
     }
@@ -53,8 +53,8 @@ bool node_valid(node_t * inNode, bool inShouldBeLeaf) {
 }
 
 void * setup(const MunitParameter inParams[], void * inFixture) {
-    uint16_t order = (uint16_t)munit_rand_int_range(2, 65535);
-    return btree_create(order);
+    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX / 2);
+    return btree_create(t);
 }
 
 void teardown(void * inFixture) {
@@ -64,7 +64,7 @@ void teardown(void * inFixture) {
 MunitResult non_full_doesnt_split(const MunitParameter inParams[], void * inFixture) {
     int i;
     btree_t * tree = (btree_t *)inFixture;
-    uint16_t numInserts = (uint16_t)munit_rand_int_range(2, tree->order-1);
+    uint16_t numInserts = (uint16_t)munit_rand_int_range(2, (2 * tree->t)-1);
 
     // Insert a number of keys, but not enough to cause a split.
     for(i = 0; i < numInserts; i++) {
@@ -72,7 +72,7 @@ MunitResult non_full_doesnt_split(const MunitParameter inParams[], void * inFixt
     }
 
     // Ensure the root is still a valid leaf.
-    if(!node_valid(tree->root, true)) {
+    if(!node_valid(tree->r, true)) {
         return MUNIT_FAIL;
     }
 
@@ -84,12 +84,12 @@ MunitResult full_causes_split(const MunitParameter inParams[], void * inFixture)
     btree_t * tree = (btree_t *)inFixture;
 
     // Insert enough keys to completely fill the root.
-    for(i = 0; i < tree->order-1; i++) {
+    for(i = 0; i < (2 * tree->t)-1; i++) {
         btree_insert(tree, rand_uint64(), 0);
     }
 
     // Ensure the root is still a valid leaf.
-    if(!node_valid(tree->root, true)) {
+    if(!node_valid(tree->r, true)) {
         return MUNIT_FAIL;
     }
 
@@ -97,7 +97,7 @@ MunitResult full_causes_split(const MunitParameter inParams[], void * inFixture)
     btree_insert(tree, rand_uint64(), 0);
 
     // Ensure the root is no longer a leaf.
-    if(!node_valid(tree->root, false)) {
+    if(!node_valid(tree->r, false)) {
         return MUNIT_FAIL;
     }
 
