@@ -8,7 +8,7 @@ btree_lib = static_library('btree', btree_src, name_prefix: '',
 
 test_src = [
     'test/create.c', 'test/destroy.c', 'test/insert.c', 'test/main.c',
-    'test/search.c'
+    'test/search.c', 'test/utility.c'
 ]
 test_exe = executable('btree_test', test_src, link_with: btree_lib, 
                       dependencies: munit_dep)

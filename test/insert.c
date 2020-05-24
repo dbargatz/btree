@@ -1,29 +1,15 @@
 #include "insert.h"
+#include "utility.h"
 #include "../src/btree.h"
 
 MunitResult non_full_doesnt_split (const MunitParameter inParams[], void * inFixture);
 MunitResult full_causes_split (const MunitParameter inParams[], void * inFixture);
-
-void * setup(const MunitParameter inParams[], void * inFixture) {
-    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX / 2);
-    return btree_create(t);
-}
-
-void teardown(void * inFixture) {
-    btree_destroy((btree_t *)inFixture);
-}
 
 MunitTest insert_tests[] = {
     { "/non_full_doesnt_split", non_full_doesnt_split, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/full_causes_split", full_causes_split, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 };
-
-uint64_t rand_uint64(void) {
-    uint64_t key;
-    munit_rand_memory(sizeof(key), (uint8_t *)&key);
-    return key;
-}
 
 bool node_valid(node_t * inNode, bool inShouldBeLeaf) {
     int i;
@@ -68,7 +54,7 @@ MunitResult non_full_doesnt_split(const MunitParameter inParams[], void * inFixt
 
     // Insert a number of keys, but not enough to cause a split.
     for(i = 0; i < numInserts; i++) {
-        btree_insert(tree, rand_uint64(), 0);
+        btree_insert(tree, rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX), 0);
     }
 
     // Ensure the root is still a valid leaf.
@@ -85,7 +71,7 @@ MunitResult full_causes_split(const MunitParameter inParams[], void * inFixture)
 
     // Insert enough keys to completely fill the root.
     for(i = 0; i < (2 * tree->t)-1; i++) {
-        btree_insert(tree, rand_uint64(), 0);
+        btree_insert(tree, rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX), 0);
     }
 
     // Ensure the root is still a valid leaf.
@@ -94,7 +80,7 @@ MunitResult full_causes_split(const MunitParameter inParams[], void * inFixture)
     }
 
     // Insert one more key to cause a split.
-    btree_insert(tree, rand_uint64(), 0);
+    btree_insert(tree, rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX), 0);
 
     // Ensure the root is no longer a leaf.
     if(!node_valid(tree->r, false)) {
