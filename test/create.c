@@ -1,6 +1,12 @@
 #include "create.h"
 #include "../src/btree.h"
 
+MunitResult degree_lt_2_fails(const MunitParameter inParams[], void * inFixture);
+MunitResult degree_gte_2_succeeds(const MunitParameter inParams[], void * inFixture);
+MunitResult root_exists(const MunitParameter inParams[], void * inFixture);
+MunitResult root_is_leaf(const MunitParameter inParams[], void * inFixture);
+MunitResult root_is_empty(const MunitParameter inParams[], void * inFixture);
+
 MunitTest create_tests[] = {
     { "/degree_lt_2_fails", degree_lt_2_fails, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
     { "/degree_gte_2_succeeds", degree_gte_2_succeeds, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
