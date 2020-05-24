@@ -15,5 +15,9 @@ An implementation of a B-Tree in C.
 ## Testing
 
 ```bash
-> meson test -C build/
+> meson test -v -C build/
 ```
+
+Tests should take about 30-60 seconds to run. The `-v` option shows the munit
+test output as it's generated; otherwise, the test output is hidden and will
+appear to hang after building until the tests are complete.
