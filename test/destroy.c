@@ -1,6 +1,10 @@
 #include "destroy.h"
 #include "../src/btree.h"
 
+MunitResult null_tree_succeeds(const MunitParameter inParams[], void * inFixture);
+MunitResult valid_tree_succeeds(const MunitParameter inParams[], void * inFixture);
+MunitResult null_root_succeeds(const MunitParameter inParams[], void * inFixture);
+
 MunitTest destroy_tests[] = {
     { "/null_tree_succeeds", null_tree_succeeds, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
     { "/valid_tree_succeeds", valid_tree_succeeds, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
