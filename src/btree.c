@@ -37,6 +37,10 @@ void btree_insert(btree_t * inTree, uint64_t inKey, uint64_t inValue) {
 }
 
 uint64_t btree_search(const btree_t * inTree, uint64_t inKey) {
+    if(NULL == inTree) {
+        return INVALID_KEY_VALUE_SENTINEL;
+    }
+
     search_result_t result = node_search(inTree->root, inKey);
     if(NULL != result.node) {
         return result.node->keys[result.valueIndex];
