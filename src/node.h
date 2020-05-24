@@ -4,9 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define INVALID_KEY_SENTINEL   (UINT64_MAX)
-#define INVALID_VALUE_SENTINEL (UINT64_MAX)
-#define INVALID_CHILD_SENTINEL (UINT64_MAX)
+#define INVALID_CHILD_SENTINEL     (UINT64_MAX)
+#define INVALID_KEY_VALUE_SENTINEL (UINT64_MAX)
 
 typedef struct _node {
     uint16_t numKeys;

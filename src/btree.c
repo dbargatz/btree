@@ -42,5 +42,5 @@ uint64_t btree_search(const btree_t * inTree, uint64_t inKey) {
         return result.node->keys[result.valueIndex];
     }
 
-    return INVALID_VALUE_SENTINEL;
+    return INVALID_KEY_VALUE_SENTINEL;
 }
