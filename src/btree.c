@@ -82,7 +82,24 @@ void btree_delete(node_t * x, uint64_t k) {
         return;
     }
 
-    return;
+    int i = x->n - 1;
+    while(i >= 0 && k < x->k[i]) {
+        i--;
+    }
+    
+    // Case 1: k in x->k, x is leaf
+    if(i >= 0 && x->k[i] == k && x->leaf) {
+        // Remove k/v from x.
+        while(i < x->n-1) {
+            x->k[i] = x->k[i+1];
+            x->v[i] = x->v[i+1];
+            i++;
+        }
+        x->k[i] = INVALID_SENTINEL;
+        x->v[i] = INVALID_SENTINEL;
+        x->n--;
+        return;
+    }
 }
 
 void btree_destroy(btree_t * T) {
