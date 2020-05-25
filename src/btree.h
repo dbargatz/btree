@@ -4,23 +4,23 @@
 #include <stdbool.h>  // for bool leaf in node_t
 #include <stdint.h>   // for uint types
 
-#define INVALID_SENTINEL (UINT64_MAX)     //< Reserved number for invalid keys/values, cannot insert
-#define MIN_DEGREE_MIN   (2)              //< Smallest allowable minimum degree (t) in a B-tree
-#define MIN_DEGREE_MAX   (UINT16_MAX / 2) //< Largest allowable minimum degree (t) in a B-tree;
-                                          //< constrains max number of keys to UINT16_MAX-1 to
-                                          //< fit in uint16_t
+#define INVALID_SENTINEL (UINT64_MAX)     ///< Reserved number for invalid keys/values, cannot insert
+#define MIN_DEGREE_MIN   (2)              ///< Smallest allowable minimum degree (t) in a B-tree
+#define MIN_DEGREE_MAX   (UINT16_MAX / 2) ///< Largest allowable minimum degree (t) in a B-tree;
+                                          ///< constrains max number of keys to UINT16_MAX-1 to
+                                          ///< fit in uint16_t
 
 /**
  * @brief Individual node of B-tree. Contains keys, values, and children (if
  * any).
  */
 typedef struct _node {
-    bool leaf;          //< True if node has no children; false if internal node
-    uint16_t n;         //< Number of keys. If leaf, t-1 <= n <= 2t-1
-    uint16_t t;         //< Minimum degree; 2 <= t <= 32,767 (UINT16_MAX / 2)
-    uint64_t * k;       //< `n` keys sorted in ascending order, no duplicates
-    uint64_t * v;       //< `n` values; v[i] is value for key k[i]
-    struct _node ** c;  //< `n+1` children; all keys c[i]->k < k[i], all keys c[i+1]->k > k[i]
+    bool leaf;          ///< True if node has no children; false if internal node
+    uint16_t n;         ///< Number of keys. If leaf, t-1 <= n <= 2t-1
+    uint16_t t;         ///< Minimum degree; 2 <= t <= 32,767 (UINT16_MAX / 2)
+    uint64_t * k;       ///< `n` keys sorted in ascending order, no duplicates
+    uint64_t * v;       ///< `n` values; v[i] is value for key k[i]
+    struct _node ** c;  ///< `n+1` children; all keys c[i]->k < k[i], all keys c[i+1]->k > k[i]
 } node_t;
 
 /**
@@ -35,8 +35,8 @@ typedef struct _node {
  * @see btree_search()
  */
 typedef struct _btree {
-    uint16_t t;  //< Minimum degree; 2 <= t <= 32,767 (UINT16_MAX / 2)
-    node_t * r;  //< Root node of B-tree
+    uint16_t t;  ///< Minimum degree; 2 <= t <= 32,767 (UINT16_MAX / 2)
+    node_t * r;  ///< Root node of B-tree
 } btree_t;
 
 /**
@@ -44,8 +44,8 @@ typedef struct _btree {
  * is NULL if key not found.
  */
 typedef struct _btree_search_result {
-    const node_t * x;  //< Node containing found key; NULL if key not found
-    uint16_t i;        //< Index of value in x->v; 0 if key not found
+    const node_t * x;  ///< Node containing found key; NULL if key not found
+    uint16_t i;        ///< Index of value in x->v; 0 if key not found
 } btree_search_result_t;
 
 /**
