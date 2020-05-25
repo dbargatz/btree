@@ -4,13 +4,13 @@
 
 MunitResult clrs_ex_18_2_1(const MunitParameter inParams[], void * inFixture);
 MunitResult clrs_fig_18_7(const MunitParameter inParams[], void * inFixture);
-MunitResult duplicate_overwrites (const MunitParameter inParams[], void * inFixture);
-MunitResult full_causes_split (const MunitParameter inParams[], void * inFixture);
-MunitResult invalid_key_fails (const MunitParameter inParams[], void * inFixture);
-MunitResult invalid_value_fails (const MunitParameter inParams[], void * inFixture);
-MunitResult non_full_doesnt_split (const MunitParameter inParams[], void * inFixture);
-MunitResult null_tree_ok (const MunitParameter inParams[], void * inFixture);
-MunitResult null_root_ok (const MunitParameter inParams[], void * inFixture);
+MunitResult duplicate_overwrites(const MunitParameter inParams[], void * inFixture);
+MunitResult full_causes_split(const MunitParameter inParams[], void * inFixture);
+MunitResult invalid_key_fails(const MunitParameter inParams[], void * inFixture);
+MunitResult invalid_value_fails(const MunitParameter inParams[], void * inFixture);
+MunitResult non_full_doesnt_split(const MunitParameter inParams[], void * inFixture);
+MunitResult null_tree_ok(const MunitParameter inParams[], void * inFixture);
+MunitResult null_root_ok(const MunitParameter inParams[], void * inFixture);
 
 MunitTest insert_tests[] = {
     { "/clrs_ex_18_2_1", clrs_ex_18_2_1, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
@@ -251,7 +251,7 @@ MunitResult full_causes_split(const MunitParameter inParams[], void * inFixture)
     return MUNIT_OK;
 }
 
-MunitResult invalid_key_fails (const MunitParameter inParams[], void * inFixture) {
+MunitResult invalid_key_fails(const MunitParameter inParams[], void * inFixture) {
     // Ensure the root is a leaf, is full, and is valid.
     btree_t * T = (btree_t *)inFixture;
     node_t * r = T->r;
@@ -271,7 +271,7 @@ MunitResult invalid_key_fails (const MunitParameter inParams[], void * inFixture
     return MUNIT_OK;
 }
 
-MunitResult invalid_value_fails (const MunitParameter inParams[], void * inFixture) {
+MunitResult invalid_value_fails(const MunitParameter inParams[], void * inFixture) {
     // Ensure the root is a leaf, is full, and is valid.
     btree_t * T = (btree_t *)inFixture;
     node_t * r = T->r;
