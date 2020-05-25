@@ -2,7 +2,7 @@ project('btree', 'c', version: '0.1.0')
 
 munit_dep = dependency('munit', fallback : ['munit', 'munit_dep'])
 
-btree_src = ['src/btree.c', 'src/node.c']
+btree_src = ['src/btree.c']
 btree_lib = static_library('btree', btree_src, name_prefix: '', 
                            name_suffix: 'static', pic: true)
 

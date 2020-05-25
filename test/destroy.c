@@ -1,6 +1,8 @@
 #include "destroy.h"
 #include "../src/btree.h"
 
+// TODO: add test ensure all memory cleaned up
+
 MunitResult null_tree_succeeds(const MunitParameter inParams[], void * inFixture);
 MunitResult valid_tree_succeeds(const MunitParameter inParams[], void * inFixture);
 MunitResult null_root_succeeds(const MunitParameter inParams[], void * inFixture);
@@ -22,30 +24,30 @@ MunitResult null_tree_succeeds(const MunitParameter inParams[], void * inFixture
 MunitResult valid_tree_succeeds(const MunitParameter inParams[], void * inFixture) {
     // Randomized min degree ensures btree_destroy() doesn't succeed in some cases
     // and fail in others.
-    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX);
-    btree_t * tree = btree_create(t);
-    if(NULL == tree) {
+    uint16_t t = (uint16_t)munit_rand_int_range(MIN_DEGREE_MIN, MIN_DEGREE_MAX);
+    btree_t * T = btree_create(t);
+    if(NULL == T) {
         // Return error because create failed, but we're testing destroy.
         return MUNIT_ERROR;
     }
     // There's nothing we can do if this fails, so assume if it doesn't crash
     // we're good.
-    btree_destroy(tree);
+    btree_destroy(T);
     return MUNIT_OK;
 }
 
 MunitResult null_root_succeeds(const MunitParameter inParams[], void * inFixture) {
     // Rather than use btree_create(), just allocate a btree_t struct and 
     // populate it with wacky data/NULL for root.
-    btree_t * tree = munit_malloc(sizeof(btree_t));
-    if(NULL == tree) {
+    btree_t * T = munit_malloc(sizeof(btree_t));
+    if(NULL == T) {
         // Return error because malloc failed, but we're testing destroy.
         return MUNIT_ERROR;
     }
-    tree->t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX);
-    tree->r = NULL;
+    T->t = (uint16_t)munit_rand_int_range(MIN_DEGREE_MIN, MIN_DEGREE_MAX);
+    T->r = NULL;
     // There's nothing we can do if this fails, so assume if it doesn't crash
     // we're good.
-    btree_destroy(tree);
+    btree_destroy(T);
     return MUNIT_OK;
 }

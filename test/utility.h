@@ -1,7 +1,7 @@
 #ifndef _UTILITY_H
 #define _UTILITY_H
 
-#include "../src/node.h"
+#include "../src/btree.h"
 #include "../subprojects/munit/munit.h"
 
 #define DEGREE_MED       (500)
@@ -10,6 +10,7 @@
 #define RANDOM_KEY_MIN   (UINT32_MAX+1)
 #define RANDOM_KEY_MAX   (UINT64_MAX)
 
+void assert_search_failed(btree_search_result_t inResult);
 void assert_tree_valid(node_t * inNode);
 uint64_t rand_uint64(uint64_t inMin, uint64_t inMax);
 void * setup_large(const MunitParameter inParams[], void * inFixture);
