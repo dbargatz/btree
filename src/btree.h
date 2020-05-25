@@ -37,6 +37,7 @@ typedef struct _btree_search_result {
     uint16_t i;        //< index of value in node->values; 0 if key not found
 } btree_search_result_t;
 
+node_t * allocate_node(uint16_t t);
 btree_t * btree_create(uint16_t t);
 void btree_delete(btree_t * T, uint64_t k);
 void btree_destroy(btree_t * T);

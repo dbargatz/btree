@@ -1,7 +1,6 @@
 #include "btree.h"
 #include <stdlib.h>   // for malloc, free
 
-node_t * allocate_node(uint16_t t);
 void btree_insert_nonfull(node_t * x, uint64_t k, uint64_t v);
 void btree_split_child(node_t * x, uint16_t i);
 void destroy_node(node_t * x);
