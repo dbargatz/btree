@@ -2,7 +2,6 @@
 #include "../src/btree.h"
 
 // TODO: add invariants from CLRS to assert_tree_valid
-// TODO: fix rand_uint64 to be fast and not hacky.
 
 void assert_node_valid(const node_t * x, bool isRoot) {
     int i;
@@ -91,14 +90,9 @@ btree_t * create_populated_tree(uint16_t t, int32_t inNumInserts) {
 }
 
 uint64_t rand_uint64(uint64_t inMin, uint64_t inMax) {
-    uint64_t k;
-    munit_rand_memory(sizeof(k), (uint8_t *)&k);
-    do {
-        if(k > inMax) {
-            k = k >> 2;
-        }
-    } while(k < inMin || k > inMax || k == INVALID_SENTINEL);
-    return k;
+    munit_assert_uint64(inMin, <, inMax);
+    uint64_t r = munit_rand_uint32() | ((uint64_t)munit_rand_uint32() << 32);
+    return inMin + (r % inMax);
 }
 
 void * setup_large(const MunitParameter inParams[], void * inFixture) {
