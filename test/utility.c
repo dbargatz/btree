@@ -57,7 +57,7 @@ void * setup_large(const MunitParameter inParams[], void * inFixture) {
     // Create a B-tree with a relatively small min degree to exercise 
     // functionality, but not take forever. Insert enough keys to cause multiple
     // splits.
-    uint16_t t = (uint16_t)munit_rand_int_range(DEGREE_MED, DEGREE_MAX / 2);
+    uint16_t t = (uint16_t)munit_rand_int_range(DEGREE_MED, DEGREE_MAX);
     return create_populated_tree(t, munit_rand_int_range(t * 4, t * 16));
 }
 

@@ -22,7 +22,7 @@ MunitResult null_tree_succeeds(const MunitParameter inParams[], void * inFixture
 MunitResult valid_tree_succeeds(const MunitParameter inParams[], void * inFixture) {
     // Randomized min degree ensures btree_destroy() doesn't succeed in some cases
     // and fail in others.
-    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX / 2);
+    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX);
     btree_t * tree = btree_create(t);
     if(NULL == tree) {
         // Return error because create failed, but we're testing destroy.
@@ -42,7 +42,7 @@ MunitResult null_root_succeeds(const MunitParameter inParams[], void * inFixture
         // Return error because malloc failed, but we're testing destroy.
         return MUNIT_ERROR;
     }
-    tree->t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX / 2);
+    tree->t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX);
     tree->r = NULL;
     // There's nothing we can do if this fails, so assume if it doesn't crash
     // we're good.

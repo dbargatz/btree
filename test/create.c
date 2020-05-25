@@ -25,7 +25,7 @@ MunitResult degree_lt_2_fails(const MunitParameter inParams[], void * inFixture)
 }
 
 MunitResult degree_gte_2_succeeds(const MunitParameter inParams[], void * inFixture) {
-    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX / 2);
+    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX);
     if(NULL == btree_create(t)) {
         return MUNIT_FAIL;
     }
@@ -33,7 +33,7 @@ MunitResult degree_gte_2_succeeds(const MunitParameter inParams[], void * inFixt
 }
 
 MunitResult root_exists(const MunitParameter inParams[], void * inFixture) {
-    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX / 2);
+    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX);
     btree_t * tree = btree_create(t);
 
     if(NULL == tree->r) {
@@ -43,7 +43,7 @@ MunitResult root_exists(const MunitParameter inParams[], void * inFixture) {
 }
 
 MunitResult root_is_leaf(const MunitParameter inParams[], void * inFixture) {
-    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX / 2);
+    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX);
     btree_t * tree = btree_create(t);
 
     if(NULL != tree->r->c[0]) {
@@ -53,7 +53,7 @@ MunitResult root_is_leaf(const MunitParameter inParams[], void * inFixture) {
 }
 
 MunitResult root_is_empty(const MunitParameter inParams[], void * inFixture) {
-    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX / 2);
+    uint16_t t = (uint16_t)munit_rand_int_range(2, DEGREE_MAX);
     btree_t * tree = btree_create(t);
 
     if(0 != tree->r->n) {

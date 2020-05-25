@@ -5,9 +5,7 @@
 #include <stdint.h>
 
 #define DEGREE_MIN     (2)
-#define DEGREE_MAX     (UINT16_MAX)
-
-#define INVALID_CHILD_SENTINEL     (UINT64_MAX)
+#define DEGREE_MAX     (UINT16_MAX / 2)
 #define INVALID_KEY_VALUE_SENTINEL (UINT64_MAX)
 
 typedef struct _node {

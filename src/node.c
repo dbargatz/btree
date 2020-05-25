@@ -1,9 +1,6 @@
 #include "node.h"
 #include <stdlib.h>
-#include <inttypes.h>
 #include <string.h>
-#include <stdio.h>
-#include "../subprojects/munit/munit.h"
 
 node_t * node_create(uint16_t t) {
     node_t * x;
@@ -67,11 +64,9 @@ search_result_t node_search(node_t * x, uint64_t k) {
     int i = 0;
     search_result_t result;
 
-    munit_logf(MUNIT_LOG_INFO, "search 0x%016" PRIX64 "", (uint64_t)x);
     if(NULL == x || INVALID_KEY_VALUE_SENTINEL == k) {
         result.node = NULL;
         result.valueIndex = 0;
-        munit_log(MUNIT_LOG_INFO, "not found, null node or bad key\n");
         return result;
     }
 
@@ -81,15 +76,12 @@ search_result_t node_search(node_t * x, uint64_t k) {
     if(i < x->n && k == x->k[i]) {
         result.node = x;
         result.valueIndex = i;
-        munit_log(MUNIT_LOG_INFO, "found\n");
         return result;
     } else if(x->leaf) {
         result.node = NULL;
         result.valueIndex = 0;
-        munit_log(MUNIT_LOG_INFO, "not found, leaf\n");
         return result;
     } else {
-        munit_logf(MUNIT_LOG_INFO, "not found, recurse 0x%016" PRIX64 "[%d] -> 0x%016" PRIX64 "\n", (uint64_t)x, i, (uint64_t)x->c[i]);
         return node_search(x->c[i], k);
     }
 }
