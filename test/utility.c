@@ -1,9 +1,7 @@
 #include "utility.h"
 #include "../src/btree.h"
 
-// TODO: add invariants from CLRS to assert_tree_valid
-
-void assert_node_valid(const node_t * x, bool isRoot) {
+void assert_node_valid(const node_t * x, uint16_t height, uint16_t * leafHeight) {
     int i;
     node_t * y;
     node_t * z;
@@ -15,7 +13,8 @@ void assert_node_valid(const node_t * x, bool isRoot) {
     munit_assert_uint16(x->t, <=, MIN_DEGREE_MAX);
 
     // Validate the invariants on number of keys per node.
-    if(!isRoot) {
+    if(height > 0) {
+        // A height of 0 means this is the root node.
         munit_assert_uint16(x->n, >=, x->t-1);
     }
     munit_assert_uint16(x->n, <=, (2*x->t)-1);
@@ -39,6 +38,14 @@ void assert_node_valid(const node_t * x, bool isRoot) {
             // All child pointers in leaves must be NULL.
             munit_assert_ptr_null(y);
             munit_assert_ptr_null(z);
+
+            // If the leaf height hasn't been set (height of UINT16_MAX), set it;
+            // otherwise, this leaf's height must match the other leaf heights.
+            if(UINT16_MAX == *leafHeight) {
+                *leafHeight = height;
+            } else {
+                munit_assert_uint16(*leafHeight, ==, height);
+            }
         } else {
             munit_assert_ptr_not_null(y);
             munit_assert_ptr_not_null(z);
@@ -49,8 +56,8 @@ void assert_node_valid(const node_t * x, bool isRoot) {
             munit_assert_uint64(y->k[y->n-1], <, x->k[i]);
             munit_assert_uint64(z->k[0], >, x->k[i]);
 
-            assert_node_valid(y, false);
-            assert_node_valid(z, false);
+            assert_node_valid(y, height+1, leafHeight);
+            assert_node_valid(z, height+1, leafHeight);
         }
     }
 
@@ -69,10 +76,13 @@ void assert_search_failed(btree_search_result_t inResult) {
 }
 
 void assert_tree_valid(const btree_t * T) {
+    uint16_t leafHeight = UINT16_MAX;
+
     munit_assert_ptr_not_null(T);
     munit_assert_uint16(T->t, >=, MIN_DEGREE_MIN);
     munit_assert_uint16(T->t, <=, MIN_DEGREE_MAX);
-    assert_node_valid(T->r, true);
+
+    assert_node_valid(T->r, 0, &leafHeight);
 }
 
 btree_t * create_populated_tree(uint16_t t, int32_t inNumInserts) {
