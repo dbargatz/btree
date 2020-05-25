@@ -1,11 +1,11 @@
 #include "btree.h"
 #include <stdlib.h>   // for malloc, free
-#include <string.h>   // for memset
 
 node_t * allocate_node(uint16_t t);
-void destroy_node(node_t * x);
 void btree_insert_nonfull(node_t * x, uint64_t k, uint64_t v);
 void btree_split_child(node_t * x, uint16_t i);
+void destroy_node(node_t * x);
+void memset64(void * __s, uint64_t __c, size_t __n);
 
 node_t * allocate_node(uint16_t t) {
     node_t * x;
@@ -16,27 +16,17 @@ node_t * allocate_node(uint16_t t) {
 
     x->n = 0;
     x->t = t;
+
     x->k = (uint64_t *)(((uint8_t *)x) + sizeof(*x));
+    memset64(x->k, INVALID_SENTINEL, (2*t)-1);
+
     x->v = (uint64_t *)(((uint8_t *)x->k) + kBytes);
+    memset64(x->v, INVALID_SENTINEL, (2*t)-1);
+
     x->c = (node_t **)(((uint8_t *)x->v) + vBytes);
-    memset(x->c, 0, cBytes);
+    memset64(x->c, (uint64_t)NULL, 2*t);
+
     return x;
-}
-
-void destroy_node(node_t * x) {
-    int i;
-
-    if(NULL == x) {
-        return;
-    }
-
-    if(!x->leaf) {
-        for(i = 0; i <= x->n; i++) {
-            destroy_node(x->c[i]);
-            x->c[i] = NULL;
-        }
-    }
-    free(x);
 }
 
 btree_t * btree_create(uint16_t t) {
@@ -89,7 +79,6 @@ void btree_insert_nonfull(node_t * x, uint64_t k, uint64_t v) {
 
     if(x->leaf) {
         while(i >= 0 && k < x->k[i]) {
-            x->k[i+1] = x->k[i];
             i--;
         }
 
@@ -97,6 +86,10 @@ void btree_insert_nonfull(node_t * x, uint64_t k, uint64_t v) {
         if(x->k[i] == k) {
             x->v[i] = v;
         } else {
+            for(i = x->n-1; i >= 0 && k < x->k[i]; i--) {
+                x->k[i+1] = x->k[i];
+                x->v[i+1] = x->v[i];
+            }
             x->k[i+1] = k;
             x->v[i+1] = v;
             x->n++;
@@ -151,11 +144,16 @@ void btree_split_child(node_t * x, uint16_t i) {
 
     for(j = 0; j < x->t-1; j++) {
         z->k[j] = y->k[j+x->t];
+        y->k[j+x->t] = INVALID_SENTINEL;
+
+        z->v[j] = y->v[j+x->t];
+        y->v[j+x->t] = INVALID_SENTINEL;
     }
 
     if(!y->leaf) {
         for(j = 0; j < x->t; j++) {
             z->c[j] = y->c[j+x->t];
+            y->c[j+x->t] = NULL;
         }
     }
     y->n = x->t-1;
@@ -167,7 +165,32 @@ void btree_split_child(node_t * x, uint16_t i) {
 
     for(j = x->n - 1; j >= i; j--) {
         x->k[j+1] = x->k[j];
+        x->v[j+1] = x->v[j];
     }
     x->k[i] = y->k[x->t-1];
+    x->v[i] = y->v[x->t-1];
     x->n++;
+}
+
+void destroy_node(node_t * x) {
+    int i;
+
+    if(NULL == x) {
+        return;
+    }
+
+    if(!x->leaf) {
+        for(i = 0; i <= x->n; i++) {
+            destroy_node(x->c[i]);
+            x->c[i] = NULL;
+        }
+    }
+    free(x);
+}
+
+void memset64(void * __s, uint64_t __c, size_t __n) {
+    size_t i;
+    for(i = 0; i < __n; i++) {
+        ((uint64_t *)__s)[i] = __c;
+    }
 }
