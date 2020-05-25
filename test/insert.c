@@ -38,6 +38,9 @@ MunitResult clrs_ex_18_2_1(const MunitParameter inParams[], void * inFixture) {
         assert_tree_valid(T);
     }
 
+    // Destroy the tree to avoid leaks.
+    btree_destroy(T);
+
     return MUNIT_OK;
 }
 
@@ -187,6 +190,9 @@ MunitResult clrs_fig_18_7(const MunitParameter inParams[], void * inFixture) {
     munit_assert_char(T->r->c[1]->c[2]->k[0], ==, 'Y'); munit_assert_char(T->r->c[1]->c[2]->v[0], ==, 'Y');
     munit_assert_char(T->r->c[1]->c[2]->k[1], ==, 'Z'); munit_assert_char(T->r->c[1]->c[2]->v[1], ==, 'Z');
 
+    // Destroy the manually-created tree to avoid leaks.
+    btree_destroy(T);
+
     return MUNIT_OK;
 }
 
@@ -298,6 +304,9 @@ MunitResult null_root_ok(const MunitParameter inParams[], void * inFixture) {
 
     uint64_t k = rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX);
     btree_insert(T, k, k);
+
+    // Free the tree to avoid leaks.
+    free(T);
     return MUNIT_OK;
 }
 
