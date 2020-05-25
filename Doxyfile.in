@@ -1,5 +1,7 @@
 # Doxyfile 1.8.11
 
+# Originally taken from https://github.com/tiernemi/meson-sample-project on 
+# 25 May 2020.
 # This file was generated from doxy-wizard before being edited to fit meson
 # This file describes the settings to be used by the documentation system
 # doxygen (www.doxygen.org) for a project.
