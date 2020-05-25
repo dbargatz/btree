@@ -54,16 +54,19 @@ void temp_dump(const char * inPrefix, uint64_t inKey, node_t ** inNodes, int inN
 }
 
 void btree_insert(btree_t * inTree, uint64_t inKey, uint64_t inValue) {
-    int t = inTree->t;
-    node_t * root = inTree->r;
+    node_t * s;
 
-    if(root->n >= (2 * t)-1) {
-        root = node_create(inTree->t);
-        root->leaf = false;
-        root->n = 0;
-        root->c[0] = inTree->r;
-        inTree->r = root;
-        node_split_child(root, 0);
+    if(NULL == inTree || NULL == inTree->r) {
+        return;
+    }
+
+    if(inTree->r->n >= (2 * inTree->t)-1) {
+        s = node_create(inTree->t);
+        s->leaf = false;
+        s->n = 0;
+        s->c[0] = inTree->r;
+        inTree->r = s;
+        node_split_child(s, 0);
     }
     node_insert(inTree->r, inKey, inValue);
 }
