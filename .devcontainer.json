@@ -4,16 +4,15 @@
     "extensions": [
         "asabil.meson",
         "austin.code-gnu-global",
+        "cschlosser.doxdocgen",
         "davidanson.vscode-markdownlint",
         "github.vscode-pull-request-github",
         "ms-vscode.azure-account",
         "ms-vscode.cpptools",
         "ms-vsliveshare.vsliveshare"
     ],
-    // Ensure pip is installed, then install and configure the necessary
-    // tools, libraries, and dependencies.
+    // Install and configure the necessary tools, libraries, and dependencies.
     "postCreateCommand": [
-        "sudo apt -y install python3-pip &&",
         "/bin/bash ./configure"
     ]
 }
