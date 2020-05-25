@@ -22,7 +22,9 @@ The `./configure` script assumes the following:
 
 * Debian-based Linux
 * GCC 6.3.0/clang 4.0.1 or newer is installed
+* Doxygen 1.8.11 or newer is installed
 * Python 3.8.x is installed
+* A version of pip3 is installed
 
 The `./configure` script will install the following:
 
@@ -43,8 +45,16 @@ Normal debug build:
 Build with AddressSanitizer:
 
 ```bash
-> ./configure
+> rm -rf build/
 > meson build -Db_sanitize=address
+```
+
+Generating Doxygen documentation (output to build/docs):
+
+```bash
+> rm -rf build/
+> meson build
+> cd build/ && ninja docs
 ```
 
 ## Testing
