@@ -4,12 +4,10 @@
 
 MunitResult delete_invalid_fails(const MunitParameter inParams[], void * inFixture);
 MunitResult delete_null_root_ok(const MunitParameter inParams[], void * inFixture);
-MunitResult delete_null_tree_ok(const MunitParameter inParams[], void * inFixture);
 
 MunitTest delete_tests[] = {
     { "/invalid_fails", delete_invalid_fails, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/null_root_ok", delete_null_root_ok, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
-    { "/null_tree_ok", delete_null_tree_ok, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 };
 
@@ -21,7 +19,7 @@ MunitResult delete_invalid_fails(const MunitParameter inParams[], void * inFixtu
     munit_assert(r->n == (2*T->t)-1);
 
     // Attempt to delete an INVALID_SENTINEL key.
-    btree_delete(T, INVALID_SENTINEL);
+    btree_delete(T->r, INVALID_SENTINEL);
 
     // Validate the root is the same node, is still a leaf, is full, and is 
     // valid. This means nothing was deleted or re-balanced.
@@ -36,19 +34,5 @@ MunitResult delete_null_root_ok(const MunitParameter inParams[], void * inFixtur
     // So long as this doesn't crash, we'll consider it OK.
     uint64_t k = rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX);
     btree_delete(NULL, k);
-    return MUNIT_OK;
-}
-
-MunitResult delete_null_tree_ok(const MunitParameter inParams[], void * inFixture) {
-    btree_t * T = (btree_t *)munit_malloc(sizeof(*T));
-    T->t = MIN_DEGREE_MIN;
-    T->r = NULL;
-
-    // So long as this doesn't crash, we'll consider it OK.
-    uint64_t k = rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX);
-    btree_delete(T, k);
-
-    // Free the tree to avoid leaks.
-    free(T);
     return MUNIT_OK;
 }
