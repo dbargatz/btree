@@ -1,9 +1,45 @@
 #include "btree.h"
 #include <stdlib.h>   // for malloc, free
 
+/**
+ * @brief Inserts a key/value pair into a leaf node, recursing through internal
+ * nodes and splitting full nodes or overwriting duplicate keys as necessary.
+ * Internal function.
+ * 
+ * @param x Node to attempt insert on, split, and/or recurse through
+ * @param k Key to insert/overwrite
+ * @param v Value associated with key to insert
+ * 
+ * @see btree_insert()
+ */
 void btree_insert_nonfull(node_t * x, uint64_t k, uint64_t v);
+
+/**
+ * @brief Splits a full node around the given index and re-balances the local
+ * portion of the B-tree. Internal function.
+ * 
+ * @param x Full node to split
+ * @param i Index of median key to split around
+ */
 void btree_split_child(node_t * x, uint16_t i);
+
+/**
+ * @brief Recursively frees a node and its child nodes (if any). Internal
+ * function.
+ * 
+ * @param x Node to destroy
+ * 
+ * @see allocate_node()
+ */
 void destroy_node(node_t * x);
+
+/**
+ * @brief Sets the __n uint64_t's pointed to by __s to __c. Internal function.
+ * 
+ * @param __s Pointer to array of __n uint64_ts
+ * @param __c Value to set each uint64_t to
+ * @param __n Number of uint64_ts to set
+ */
 void memset64(void * __s, uint64_t __c, size_t __n);
 
 node_t * allocate_node(uint16_t t) {
