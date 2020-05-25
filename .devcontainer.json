@@ -13,7 +13,7 @@
     ],
     // Install and configure the necessary tools, libraries, and dependencies.
     "postCreateCommand": [
-        "sudo apt -y install doxygen python3-pip &&",
+        "sudo apt -y install doxygen graphviz python3-pip &&",
         "/bin/bash ./configure"
     ]
 }

@@ -23,6 +23,7 @@ The `./configure` script assumes the following:
 * Debian-based Linux
 * GCC 6.3.0/clang 4.0.1 or newer is installed
 * Doxygen 1.8.11 or newer is installed
+* Graphviz 2.38.0 or newer is installed
 * Python 3.8.x is installed
 * A version of pip3 is installed
 
