@@ -2,8 +2,6 @@
 #include "utility.h"
 #include "../src/btree.h"
 
-#define TEST_DEGREE_MAX  (100)
-
 MunitResult null_tree_fails (const MunitParameter inParams[], void * inFixture);
 MunitResult null_root_fails (const MunitParameter inParams[], void * inFixture);
 MunitResult not_found_fails (const MunitParameter inParams[], void * inFixture);
@@ -12,13 +10,13 @@ MunitResult found_succeeds (const MunitParameter inParams[], void * inFixture);
 MunitTest search_tests[] = {
     { "/null_tree_fails", null_tree_fails, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
     { "/null_root_fails", null_root_fails, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
-    { "/not_found_fails", not_found_fails, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL },
-    { "/found_succeeds", found_succeeds, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL },
+    { "/not_found_fails", not_found_fails, setup_medium, teardown, MUNIT_TEST_OPTION_NONE, NULL },
+    { "/found_succeeds", found_succeeds, setup_medium, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 };
 
 MunitResult null_tree_fails (const MunitParameter inParams[], void * inFixture) {
-    uint64_t value = btree_search(NULL, rand_uint64(RANDOM_KEY_MIN, RANDOM_KEY_MAX));
+    uint64_t value = btree_search(NULL, rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX));
     munit_assert_uint64(value, ==, INVALID_KEY_VALUE_SENTINEL);
     return MUNIT_OK;
 }
@@ -27,7 +25,7 @@ MunitResult null_root_fails (const MunitParameter inParams[], void * inFixture) 
     btree_t * tree = (btree_t *)munit_malloc(sizeof(*tree));
     tree->t = (uint16_t)munit_rand_int_range(1, UINT16_MAX);
     tree->r = NULL;
-    uint64_t value = btree_search(tree, rand_uint64(RANDOM_KEY_MIN, RANDOM_KEY_MAX));
+    uint64_t value = btree_search(tree, rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX));
     munit_assert_uint64(value, ==, INVALID_KEY_VALUE_SENTINEL);
     return MUNIT_OK;
 }
