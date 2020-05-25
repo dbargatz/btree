@@ -4,8 +4,8 @@
 
 // TODO: add example 18.2-1 (p. 497)
 // TODO: add figure 18.7, verify
-// TODO: add duplicate key overwrites
 
+MunitResult duplicate_overwrites (const MunitParameter inParams[], void * inFixture);
 MunitResult full_causes_split (const MunitParameter inParams[], void * inFixture);
 MunitResult invalid_key_fails (const MunitParameter inParams[], void * inFixture);
 MunitResult invalid_value_fails (const MunitParameter inParams[], void * inFixture);
@@ -14,6 +14,7 @@ MunitResult null_tree_ok (const MunitParameter inParams[], void * inFixture);
 MunitResult null_root_ok (const MunitParameter inParams[], void * inFixture);
 
 MunitTest insert_tests[] = {
+    { "/duplicate_overwrites", duplicate_overwrites, setup_medium, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/full_causes_split", full_causes_split, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/invalid_key_fails", invalid_key_fails, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/invalid_value_fails", invalid_value_fails, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
@@ -23,7 +24,43 @@ MunitTest insert_tests[] = {
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 };
 
+MunitResult duplicate_overwrites(const MunitParameter inParams[], void * inFixture) {
+    btree_search_result_t result;
+    btree_t * T = (btree_t *)inFixture;
+
+    // Generate a key and two different values guaranteed not to be in the tree.
+    uint64_t k = rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX);
+    uint64_t v1 = rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX);
+    uint64_t v2 = rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX);
+
+    // Unlikely, but if v1==v2, error out of the test.
+    if(v1 == v2) {
+        munit_errorf("v1 == v2 (0x%016" PRIX64 ")", v1);
+        return MUNIT_ERROR;
+    }
+
+    // Insert the key with the first value.
+    btree_insert(T, k, v1);
+
+    // Validate that the key was inserted and has the correct value.
+    result = btree_search(T->r, k);
+    munit_assert_ptr_not_null(result.x);
+    munit_assert_uint64(v1, ==, result.x->v[result.i]);
+
+    // Re-insert the same key, but using a different value.
+    btree_insert(T, k, v2);
+
+    // Validate that the new value overwrote the old value.
+    result = btree_search(T->r, k);
+    munit_assert_ptr_not_null(result.x);
+    munit_assert_uint64(v1, !=, result.x->v[result.i]);
+    munit_assert_uint64(v2, ==, result.x->v[result.i]);
+
+    return MUNIT_OK;
+}
+
 MunitResult full_causes_split(const MunitParameter inParams[], void * inFixture) {
+    // Generate a key guaranteed not to be in the tree.
     uint64_t k = rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX);
 
     // Ensure the root is a leaf, is full, and is valid.

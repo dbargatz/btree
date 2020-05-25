@@ -92,21 +92,33 @@ void btree_insert_nonfull(node_t * x, uint64_t k, uint64_t v) {
             x->k[i+1] = x->k[i];
             i--;
         }
-        x->k[i+1] = k;
-        x->v[i+1] = v;
-        x->n++;
+
+        // Departure from CLRS: duplicate keys overwrite their existing value.
+        if(x->k[i] == k) {
+            x->v[i] = v;
+        } else {
+            x->k[i+1] = k;
+            x->v[i+1] = v;
+            x->n++;
+        }
     } else {
         while(i >= 0 && k < x->k[i]) {
             i--;
         }
-        i++;
-        if(x->c[i]->n == (2*x->t)-1) {
-            btree_split_child(x, i);
-            if(k > x->k[i]) {
-                i++;
+
+        // Departure from CLRS: duplicate keys overwrite their existing value.
+        if(x->k[i] == k) {
+            x->v[i] = v;
+        } else {
+            i++;
+            if(x->c[i]->n == (2*x->t)-1) {
+                btree_split_child(x, i);
+                if(k > x->k[i]) {
+                    i++;
+                }
             }
+            btree_insert_nonfull(x->c[i], k, v);
         }
-        btree_insert_nonfull(x->c[i], k, v);
     }
 }
 
