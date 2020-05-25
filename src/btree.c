@@ -78,6 +78,10 @@ btree_t * btree_create(uint16_t t) {
 }
 
 void btree_delete(btree_t * T, uint64_t k) {
+    if(NULL == T || NULL == T->r || INVALID_SENTINEL == k) {
+        return;
+    }
+
     return;
 }
 
