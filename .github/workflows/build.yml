@@ -47,3 +47,21 @@ jobs:
     # Run the unit tests.
     - name: Run tests
       run: cd build/ && meson test
+  
+    # Upload the library.
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Static Library
+        path: build/btree.static
+
+    # Upload the test results.
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Test Results
+        path: build/meson-logs/testlog.txt
+        
+    # Upload the docs.
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Docs
+        path: build/docs/
