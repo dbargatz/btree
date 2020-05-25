@@ -2,16 +2,24 @@
 #include "utility.h"
 #include "../src/btree.h"
 
+MunitResult invalid_fails (const MunitParameter inParams[], void * inFixture);
 MunitResult found_succeeds (const MunitParameter inParams[], void * inFixture);
 MunitResult not_found_fails (const MunitParameter inParams[], void * inFixture);
 MunitResult null_root_fails (const MunitParameter inParams[], void * inFixture);
 
 MunitTest search_tests[] = {
+    { "/invalid_fails", invalid_fails, setup_medium, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/found_succeeds", found_succeeds, setup_medium, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/not_found_fails", not_found_fails, setup_medium, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/null_root_fails", null_root_fails, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 };
+
+MunitResult invalid_fails (const MunitParameter inParams[], void * inFixture) {
+    btree_t * T = (btree_t *)inFixture;
+    assert_search_failed(btree_search(T->r, INVALID_SENTINEL));
+    return MUNIT_OK;
+}
 
 MunitResult found_succeeds (const MunitParameter inParams[], void * inFixture) {
     // Generate a test key guaranteed to NOT be in the tree and insert it, using
