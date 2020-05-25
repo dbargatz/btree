@@ -82,6 +82,7 @@ void btree_delete(node_t * x, uint64_t k) {
         return;
     }
 
+    int j;
     int i = x->n - 1;
     while(i >= 0 && k < x->k[i]) {
         i--;
@@ -98,6 +99,60 @@ void btree_delete(node_t * x, uint64_t k) {
         x->k[i] = INVALID_SENTINEL;
         x->v[i] = INVALID_SENTINEL;
         x->n--;
+        return;
+    }
+
+    // Case 2: k in x->k, x is internal (not leaf)
+    if(i >= 0 && x->k[i] == k) {
+        node_t * y = x->c[i];
+        node_t * z = x->c[i+1];
+        if(y->n >= x->t) {
+            // Case 2a: y->n >= t
+            // We don't allow duplicate keys, so we don't need to recurse.
+            x->k[i] = y->k[y->n-1];
+            x->v[i] = y->v[y->n-1];
+            y->k[y->n-1] = INVALID_SENTINEL;
+            y->v[y->n-1] = INVALID_SENTINEL;
+            y->n--;
+        } else if(z->n >= x->t) {
+            // Case 2b: y->n < t, z->n >= t
+            // We don't allow duplicate keys, so we don't need to recurse.
+            x->k[i] = z->k[0];
+            x->v[i] = z->v[0];
+            for(j = 0; j < z->n-1; j++) {
+                z->k[j] = z->k[j+1];
+                z->v[j] = z->v[j+1];
+            }
+            z->k[z->n-1] = INVALID_SENTINEL;
+            z->v[z->n-1] = INVALID_SENTINEL;
+            z->n--;
+        } else {
+            // Case 2c: y->n < t, z->n < t
+            y->k[y->n] = x->k[i];
+            y->v[y->n] = x->v[i];
+            y->n++;
+
+            for(j = i; j < x->n-1; j++) {
+                x->k[j] = x->k[j+1];
+                x->v[j] = x->v[j+1];
+                x->c[j] = x->c[j+1];
+            }
+            x->k[j] = INVALID_SENTINEL;
+            x->v[j] = INVALID_SENTINEL;
+            x->c[j] = x->c[j+1];
+            x->c[j+1] = NULL;
+
+            for(j = 0; j < z->n; j++) {
+                y->k[y->n] = z->k[j];
+                y->v[y->n] = z->v[j];
+                y->c[y->n] = z->c[j];
+                y->n++;
+            }
+            y->c[y->n] = z->c[j];
+
+            destroy_node(z);
+            btree_delete(y, k);
+        }
         return;
     }
 }
