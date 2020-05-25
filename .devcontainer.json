@@ -13,6 +13,7 @@
     ],
     // Install and configure the necessary tools, libraries, and dependencies.
     "postCreateCommand": [
+        "sudo apt -y install pip &&",
         "/bin/bash ./configure"
     ]
 }
