@@ -34,7 +34,6 @@ MunitResult clrs_ex_18_2_1(const MunitParameter inParams[], void * inFixture) {
     };
 
     for(i = 0; i < sizeof(keys); i++) {
-        munit_logf(MUNIT_LOG_INFO, "Inserting %c", keys[i]);
         btree_insert(T, keys[i], keys[i]);
         assert_tree_valid(T);
     }
