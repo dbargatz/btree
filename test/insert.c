@@ -67,14 +67,14 @@ MunitResult full_causes_split(const MunitParameter inParams[], void * inFixture)
     btree_t * T = (btree_t *)inFixture;
     munit_assert(T->r->leaf);
     munit_assert(T->r->n == (2*T->t)-1);
-    assert_tree_valid(T->r);
+    assert_tree_valid(T);
 
     // Insert one more key to cause a split.
     btree_insert(T, k, k);
 
     // Validate the root is no longer a leaf, and the whole tree is valid.
     munit_assert(!T->r->leaf);
-    assert_tree_valid(T->r);
+    assert_tree_valid(T);
 
     return MUNIT_OK;
 }
@@ -95,7 +95,7 @@ MunitResult invalid_key_fails (const MunitParameter inParams[], void * inFixture
     munit_assert_ptr_equal(T->r, r);
     munit_assert(r->leaf);
     munit_assert(r->n == (2*T->t)-1);
-    assert_tree_valid(T->r);
+    assert_tree_valid(T);
     return MUNIT_OK;
 }
 
@@ -115,7 +115,7 @@ MunitResult invalid_value_fails (const MunitParameter inParams[], void * inFixtu
     munit_assert_ptr_equal(T->r, r);
     munit_assert(r->leaf);
     munit_assert(r->n == (2*T->t)-1);
-    assert_tree_valid(T->r);
+    assert_tree_valid(T);
     return MUNIT_OK;
 }
 
@@ -140,7 +140,7 @@ MunitResult non_full_doesnt_split(const MunitParameter inParams[], void * inFixt
     btree_t * T = (btree_t *)inFixture;
     munit_assert(T->r->leaf);
     munit_assert(T->r->n == (2*T->t)-1);
-    assert_tree_valid(T->r);
+    assert_tree_valid(T);
 
     return MUNIT_OK;
 }
