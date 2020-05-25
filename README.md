@@ -33,10 +33,18 @@ tests
 
 ## Building
 
+Normal debug build:
+
 ```bash
 > ./configure
-> meson setup build
-> meson compile -C build/
+> meson build
+```
+
+Build with AddressSanitizer:
+
+```bash
+> ./configure
+> meson build -Db_sanitize=address
 ```
 
 ## Testing
