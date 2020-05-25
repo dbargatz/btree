@@ -7,16 +7,16 @@
 // TODO: add duplicate key overwrites
 
 MunitResult full_causes_split (const MunitParameter inParams[], void * inFixture);
-MunitResult insert_invalid_key_fails (const MunitParameter inParams[], void * inFixture);
-MunitResult insert_invalid_value_fails (const MunitParameter inParams[], void * inFixture);
+MunitResult invalid_key_fails (const MunitParameter inParams[], void * inFixture);
+MunitResult invalid_value_fails (const MunitParameter inParams[], void * inFixture);
 MunitResult non_full_doesnt_split (const MunitParameter inParams[], void * inFixture);
 MunitResult null_tree_ok (const MunitParameter inParams[], void * inFixture);
 MunitResult null_root_ok (const MunitParameter inParams[], void * inFixture);
 
 MunitTest insert_tests[] = {
     { "/full_causes_split", full_causes_split, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
-    { "/insert_invalid_key_fails", insert_invalid_key_fails, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
-    { "/insert_invalid_value_fails", insert_invalid_value_fails, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
+    { "/invalid_key_fails", invalid_key_fails, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
+    { "/invalid_value_fails", invalid_value_fails, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/non_full_doesnt_split", non_full_doesnt_split, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/null_tree_ok", null_tree_ok, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
     { "/null_root_ok", null_root_ok, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
@@ -42,7 +42,7 @@ MunitResult full_causes_split(const MunitParameter inParams[], void * inFixture)
     return MUNIT_OK;
 }
 
-MunitResult insert_invalid_key_fails (const MunitParameter inParams[], void * inFixture) {
+MunitResult invalid_key_fails (const MunitParameter inParams[], void * inFixture) {
     // Ensure the root is a leaf, is full, and is valid.
     btree_t * T = (btree_t *)inFixture;
     node_t * r = T->r;
@@ -62,7 +62,7 @@ MunitResult insert_invalid_key_fails (const MunitParameter inParams[], void * in
     return MUNIT_OK;
 }
 
-MunitResult insert_invalid_value_fails (const MunitParameter inParams[], void * inFixture) {
+MunitResult invalid_value_fails (const MunitParameter inParams[], void * inFixture) {
     // Ensure the root is a leaf, is full, and is valid.
     btree_t * T = (btree_t *)inFixture;
     node_t * r = T->r;

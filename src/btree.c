@@ -67,7 +67,7 @@ void btree_destroy(btree_t * inTree) {
 void btree_insert(btree_t * T, uint64_t k, uint64_t v) {
     node_t * s;
 
-    if(NULL == T || NULL == T->r) {
+    if(NULL == T || NULL == T->r || INVALID_SENTINEL == k || INVALID_SENTINEL == v) {
         return;
     }
 
