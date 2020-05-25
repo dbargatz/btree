@@ -1,8 +1,6 @@
 #include "destroy.h"
 #include "../src/btree.h"
 
-// TODO: add test ensure all memory cleaned up
-
 MunitResult null_tree_succeeds(const MunitParameter inParams[], void * inFixture);
 MunitResult valid_tree_succeeds(const MunitParameter inParams[], void * inFixture);
 MunitResult null_root_succeeds(const MunitParameter inParams[], void * inFixture);
