@@ -2,9 +2,9 @@
 #include "utility.h"
 #include "../src/btree.h"
 
-// TODO: add example 18.2-1 (p. 497)
 // TODO: add figure 18.7, verify
 
+MunitResult clrs_18_2_1(const MunitParameter inParams[], void * inFixture);
 MunitResult duplicate_overwrites (const MunitParameter inParams[], void * inFixture);
 MunitResult full_causes_split (const MunitParameter inParams[], void * inFixture);
 MunitResult invalid_key_fails (const MunitParameter inParams[], void * inFixture);
@@ -14,6 +14,7 @@ MunitResult null_tree_ok (const MunitParameter inParams[], void * inFixture);
 MunitResult null_root_ok (const MunitParameter inParams[], void * inFixture);
 
 MunitTest insert_tests[] = {
+    { "/clrs_18_2_1", clrs_18_2_1, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
     { "/duplicate_overwrites", duplicate_overwrites, setup_medium, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/full_causes_split", full_causes_split, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/invalid_key_fails", invalid_key_fails, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
@@ -23,6 +24,23 @@ MunitTest insert_tests[] = {
     { "/null_root_ok", null_root_ok, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 };
+
+MunitResult clrs_18_2_1(const MunitParameter inParams[], void * inFixture) {
+    int i;
+    btree_t * T = btree_create(2);
+    char keys[] = {
+        'F', 'S', 'Q', 'K', 'C', 'L', 'H', 'T', 'V', 'W', 'M',
+        'R', 'N', 'P', 'A', 'B', 'X', 'Y', 'D', 'Z', 'E' 
+    };
+
+    for(i = 0; i < sizeof(keys); i++) {
+        munit_logf(MUNIT_LOG_INFO, "Inserting %c", keys[i]);
+        btree_insert(T, keys[i], keys[i]);
+        assert_tree_valid(T);
+    }
+
+    return MUNIT_OK;
+}
 
 MunitResult duplicate_overwrites(const MunitParameter inParams[], void * inFixture) {
     btree_search_result_t result;
