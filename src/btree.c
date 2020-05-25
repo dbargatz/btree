@@ -85,12 +85,12 @@ void btree_delete(btree_t * T, uint64_t k) {
     return;
 }
 
-void btree_destroy(btree_t * inTree) {
-    if(NULL == inTree) {
+void btree_destroy(btree_t * T) {
+    if(NULL == T) {
         return;
     }
-    destroy_node(inTree->r);
-    free(inTree);
+    destroy_node(T->r);
+    free(T);
 }
 
 void btree_insert(btree_t * T, uint64_t k, uint64_t v) {
