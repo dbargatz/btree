@@ -170,6 +170,8 @@ void btree_split_child(node_t * x, uint16_t i) {
     x->k[i] = y->k[x->t-1];
     x->v[i] = y->v[x->t-1];
     x->n++;
+    y->k[x->t-1] = INVALID_SENTINEL;
+    y->v[x->t-1] = INVALID_SENTINEL;
 }
 
 void destroy_node(node_t * x) {
