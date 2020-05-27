@@ -16,6 +16,9 @@ than one of a given key in the B-tree at a time.
 * The `DISK_READ` and `DISK_WRITE` functions aren't implemented; it's assumed
 that any reading or writing to storage is handled externally.
 
+Note that `btree_delete()` is unoptimized and a bit of a mess; it could also
+benefit from some additional testing. Pull requests welcome!
+
 ## Environment
 
 The `./configure` script assumes the following:
