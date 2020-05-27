@@ -7,6 +7,7 @@ MunitResult delete_clrs_fig_18_8(const MunitParameter inParams[], void * inFixtu
 MunitResult delete_invalid_ok(const MunitParameter inParams[], void * inFixture);
 MunitResult delete_missing_ok(const MunitParameter inParams[], void * inFixture);
 MunitResult delete_null_root_ok(const MunitParameter inParams[], void * inFixture);
+MunitResult delete_null_tree_ok(const MunitParameter inParams[], void * inFixture);
 
 MunitTest delete_tests[] = {
     { "/case_1", delete_case_1, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
@@ -14,6 +15,7 @@ MunitTest delete_tests[] = {
     { "/invalid_ok", delete_invalid_ok, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/missing_ok", delete_missing_ok, setup_root, teardown, MUNIT_TEST_OPTION_NONE, NULL },
     { "/null_root_ok", delete_null_root_ok, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
+    { "/null_tree_ok", delete_null_tree_ok, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 };
 
@@ -34,7 +36,7 @@ MunitResult delete_case_1(const MunitParameter inParams[], void * inFixture) {
     munit_assert_uint64(before.x->k[before.i], ==, k);
 
     // Delete the random key.
-    btree_delete(T->r, k);
+    btree_delete(T, k);
 
     // Ensure that the search now returns failure.
     assert_search_failed(btree_search(T->r, k));
@@ -119,7 +121,7 @@ MunitResult delete_clrs_fig_18_8(const MunitParameter inParams[], void * inFixtu
 
     // Figure 18.8b: Delete 'F', validate case 1.
     munit_log(MUNIT_LOG_INFO, "Running 18.8b");
-    btree_delete(T->r, 'F');
+    btree_delete(T, 'F');
     assert_tree_valid(T);
     assert_search_failed(btree_search(T->r, 'F'));
     munit_assert_uint16(L0_1->n, ==, 2);
@@ -128,7 +130,7 @@ MunitResult delete_clrs_fig_18_8(const MunitParameter inParams[], void * inFixtu
 
     // Figure 18.8c: Delete 'M', validate case 2a.
     munit_log(MUNIT_LOG_INFO, "Running 18.8c");
-    btree_delete(T->r, 'M');
+    btree_delete(T, 'M');
     assert_tree_valid(T);
     assert_search_failed(btree_search(T->r, 'M'));
     munit_assert_uint16(L0->n, ==, 3);
@@ -141,7 +143,7 @@ MunitResult delete_clrs_fig_18_8(const MunitParameter inParams[], void * inFixtu
 
     // Figure 18.8d: Delete 'G', validate case 2c.
     munit_log(MUNIT_LOG_INFO, "Running 18.8d");
-    btree_delete(T->r, 'G');
+    btree_delete(T, 'G');
     assert_tree_valid(T);
     assert_search_failed(btree_search(T->r, 'G'));
     munit_assert_uint16(L0->n, ==, 2);
@@ -155,7 +157,7 @@ MunitResult delete_clrs_fig_18_8(const MunitParameter inParams[], void * inFixtu
 
     // Figure 18.8e/e': Delete 'D', validate case 3b.
     munit_log(MUNIT_LOG_INFO, "Running 18.8e/e'");
-    btree_delete(T->r, 'D');
+    btree_delete(T, 'D');
     assert_tree_valid(T);
     assert_search_failed(btree_search(T->r, 'D'));
     munit_assert_uint16(T->r->n, ==, 5);
@@ -187,7 +189,7 @@ MunitResult delete_clrs_fig_18_8(const MunitParameter inParams[], void * inFixtu
 
     // Figure 18.8f: Delete 'B', validate case 3a.
     munit_log(MUNIT_LOG_INFO, "Running 18.8f");
-    btree_delete(T->r, 'B');
+    btree_delete(T, 'B');
     assert_tree_valid(T);
     assert_search_failed(btree_search(T->r, 'B'));
     munit_assert_uint16(T->r->n, ==, 5);
@@ -199,7 +201,7 @@ MunitResult delete_clrs_fig_18_8(const MunitParameter inParams[], void * inFixtu
     munit_assert_uint16(T->r->c[0]->n, ==, 2);
     munit_assert_char(T->r->c[0]->k[0], ==, 'A'); munit_assert_char(T->r->c[0]->v[0], ==, 'A');
     munit_assert_char(T->r->c[0]->k[1], ==, 'C'); munit_assert_char(T->r->c[0]->v[1], ==, 'C');
-    munit_assert_uint16(T->r->c[1]->n, ==, 3);
+    munit_assert_uint16(T->r->c[1]->n, ==, 2);
     munit_assert_char(T->r->c[1]->k[0], ==, 'J'); munit_assert_char(T->r->c[1]->v[0], ==, 'J');
     munit_assert_char(T->r->c[1]->k[1], ==, 'K'); munit_assert_char(T->r->c[1]->v[1], ==, 'K');
     munit_assert_uint16(T->r->c[2]->n, ==, 2);
@@ -230,7 +232,7 @@ MunitResult delete_invalid_ok(const MunitParameter inParams[], void * inFixture)
     munit_assert(r->n == (2*T->t)-1);
 
     // Attempt to delete an INVALID_SENTINEL key.
-    btree_delete(T->r, INVALID_SENTINEL);
+    btree_delete(T, INVALID_SENTINEL);
 
     // Validate the root is the same node, is still a leaf, is full, and is 
     // valid. This means nothing was deleted or re-balanced.
@@ -252,7 +254,7 @@ MunitResult delete_missing_ok(const MunitParameter inParams[], void * inFixture)
     uint64_t k = rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX);
 
     // Attempt to delete the missing key.
-    btree_delete(T->r, k);
+    btree_delete(T, k);
 
     // Validate the root is the same node, is still a leaf, is full, and is 
     // valid. This means nothing was deleted or re-balanced.
@@ -264,6 +266,20 @@ MunitResult delete_missing_ok(const MunitParameter inParams[], void * inFixture)
 }
 
 MunitResult delete_null_root_ok(const MunitParameter inParams[], void * inFixture) {
+    btree_t * T = (btree_t *)munit_malloc(sizeof(*T));
+    T->t = MIN_DEGREE_MIN;
+    T->r = NULL;
+
+    // So long as this doesn't crash, we'll consider it OK.
+    uint64_t k = rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX);
+    btree_delete(T, k);
+
+    // Free the tree to avoid leaks.
+    free(T);
+    return MUNIT_OK;
+}
+
+MunitResult delete_null_tree_ok(const MunitParameter inParams[], void * inFixture) {
     // So long as this doesn't crash, we'll consider it OK.
     uint64_t k = rand_uint64(TEST_KEY_MIN, TEST_KEY_MAX);
     btree_delete(NULL, k);
