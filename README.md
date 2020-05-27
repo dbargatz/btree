@@ -7,7 +7,7 @@ described in CLRS<sup>[1](#clrs)</sup>.
 
 ## Documentation
 
-Doxygen-generated documentation is located at <https://dbargatz.me/btree.>
+Doxygen-generated documentation is located at <https://dbargatz.me/btree>.
 
 ## Differences
 
