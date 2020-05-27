@@ -2,6 +2,18 @@
 #include <stdlib.h>   // for malloc, free
 
 /**
+ * @brief Removes the given key and associated value from the subtree rooted
+ * at the given node, if present, and re-balances the B-tree in O(log n) time 
+ * (if necessary). Does nothing if key is not present or is INVALID_SENTINEL.
+ * 
+ * @param x Root node of subtree to remove from
+ * @param k Key to remove; associated value will be removed as well
+ * 
+ * @see btree_delete()
+ */
+void btree_delete_from_subtree(node_t * x, uint64_t k);
+
+/**
  * @brief Inserts a key/value pair into a leaf node, recursing through internal
  * nodes and splitting full nodes or overwriting duplicate keys as necessary.
  * Internal function.
@@ -77,11 +89,25 @@ btree_t * btree_create(uint16_t t) {
     return tree;
 }
 
-#include "../subprojects/munit/munit.h"
+void btree_delete(btree_t * T, uint64_t k) {
+    if(NULL == T || NULL == T->r || INVALID_SENTINEL == k) {
+        return;
+    }
 
-void btree_delete(node_t * x, uint64_t k) {
+    node_t * root = T->r;
+    btree_delete_from_subtree(root, k);
+
+    // It's possible that the root node is now completely empty. If so,
+    // replace the root with its only child and free the old root.
+    if(0 == root->n) {
+        T->r = root->c[0];
+        root->c[0] = NULL;
+        destroy_node(root);
+    }
+}
+
+void btree_delete_from_subtree(node_t * x, uint64_t k) {
     if(NULL == x || INVALID_SENTINEL == k) {
-        munit_log(MUNIT_LOG_INFO, "x was NULL or k was INVALID_SENTINEL");
         return;
     }
 
@@ -90,11 +116,9 @@ void btree_delete(node_t * x, uint64_t k) {
     while(i >= 0 && k < x->k[i]) {
         i--;
     }
-    munit_logf(MUNIT_LOG_INFO, "Delete: 0x%016" PRIX64 " from node 0x%016" PRIX64 " (x->k[%d])", k, (uint64_t)x, i);
 
     // Case 1: k in x->k, x is leaf
     if(i >= 0 && x->k[i] == k && x->leaf) {
-        munit_logf(MUNIT_LOG_INFO, "\tCase 1: x->k[%d] == %c", i, (char)x->k[i]);
         // Remove k/v from x.
         while(i < x->n-1) {
             x->k[i] = x->k[i+1];
@@ -104,10 +128,6 @@ void btree_delete(node_t * x, uint64_t k) {
         x->k[i] = INVALID_SENTINEL;
         x->v[i] = INVALID_SENTINEL;
         x->n--;
-
-        for(i = 0; i < x->n; i++) {
-                munit_logf(MUNIT_LOG_INFO, "\t\t%d/%d] k: %c | v: %c | c: 0x%016" PRIX64 "",i, x->n, (char)x->k[i], (char)x->v[i], (uint64_t)x->c[i]);
-        }
         return;
     }
 
@@ -118,19 +138,14 @@ void btree_delete(node_t * x, uint64_t k) {
         if(y->n >= x->t) {
             // Case 2a: y->n >= t
             // We don't allow duplicate keys, so we don't need to recurse.
-            munit_logf(MUNIT_LOG_INFO, "\tCase 2a: x->k[%d] == %c, y->n == %d, z->n == %d", i, (char)x->k[i], y->n, z->n);
             x->k[i] = y->k[y->n-1];
             x->v[i] = y->v[y->n-1];
             y->k[y->n-1] = INVALID_SENTINEL;
             y->v[y->n-1] = INVALID_SENTINEL;
             y->n--;
-            for(i = 0; i < x->n; i++) {
-                munit_logf(MUNIT_LOG_INFO, "\t\t%d/%d] k: %c | v: %c | c: 0x%016" PRIX64 "",i, x->n, (char)x->k[i], (char)x->v[i], (uint64_t)x->c[i]);
-            }
         } else if(z->n >= x->t) {
             // Case 2b: y->n < t, z->n >= t
             // We don't allow duplicate keys, so we don't need to recurse.
-            munit_logf(MUNIT_LOG_INFO, "tCase 2b: x->k[%d] == %c, y->n == %d, z->n == %d", i, (char)x->k[i], y->n, z->n);
             x->k[i] = z->k[0];
             x->v[i] = z->v[0];
             for(j = 0; j < z->n-1; j++) {
@@ -140,13 +155,8 @@ void btree_delete(node_t * x, uint64_t k) {
             z->k[z->n-1] = INVALID_SENTINEL;
             z->v[z->n-1] = INVALID_SENTINEL;
             z->n--;
-            
-            for(i = 0; i < x->n; i++) {
-                munit_logf(MUNIT_LOG_INFO, "\t\t%d/%d] k: %c | v: %c | c: 0x%016" PRIX64 "",i, x->n, (char)x->k[i], (char)x->v[i], (uint64_t)x->c[i]);
-            }
         } else {
             // Case 2c: y->n < t, z->n < t
-            munit_logf(MUNIT_LOG_INFO, "\tCase 2c: x->k[%d] == %c, y->n == %d, z->n == %d", i, (char)x->k[i], y->n, z->n);
             y->k[y->n] = x->k[i];
             y->v[y->n] = x->v[i];
             y->n++;
@@ -172,38 +182,129 @@ void btree_delete(node_t * x, uint64_t k) {
             }
             y->c[y->n] = z->c[j];
 
-            for(i = 0; i < x->n; i++) {
-                munit_logf(MUNIT_LOG_INFO, "\t\t%d/%d] k: %c | v: %c | c: 0x%016" PRIX64 "",i, x->n, (char)x->k[i], (char)x->v[i], (uint64_t)x->c[i]);
-            }
             destroy_node(z);
-            munit_log(MUNIT_LOG_INFO, "\tCase 2c: recurse");
-            btree_delete(y, k);
-            munit_log(MUNIT_LOG_INFO, "\tCase 2c: back from recurse");
+            btree_delete_from_subtree(y, k);
         }
         return;
     }
 
     // If this is a leaf, we have nowhere to go - the key isn't present.
     if(x->leaf) {
-        munit_logf(MUNIT_LOG_INFO, "\tCase X: key 0x%016" PRIX64 " not found!", k);
         return;
     }
 
     i++;
-    if(x->c[i]->n == x->t-1) {
+    node_t * child = x->c[i];
+    if(child->n == x->t-1) {
         // Case 3: k not in x->k, find subtree, recurse
-        if((i <= x->n && x->c[i+1]->n >= x->t) || (i > 0 && x->c[i-1]->n >= x->t)) {
-            // TODO Case 3a: Immediate sibling has at least t keys
-            munit_log(MUNIT_LOG_INFO, "\tTODO Case 3a: immediate sibling n >= t");
+        if(i <= x->n && x->c[i+1]->n >= x->t) {
+            // Case 3a: Immediate sibling (right) has at least t keys
+            node_t * sib = x->c[i+1];
+
+            // Give x->c[i] an extra key/value from x->k.
+            child->k[child->n] = x->k[i];
+            child->v[child->n] = x->v[i];
+            child->n++;
+
+            // Give x a key/value from right sibling.
+            x->k[i] = sib->k[0];
+            x->v[i] = sib->v[0];
+
+            // Move child pointer from right sibling into child.
+            child->c[child->n] = sib->c[0];
+            
+            // Shift right sibling keys/values/children down a slot.
+            sib->n--;
+            for(j = 0; j < sib->n; j++) {
+                sib->k[j] = sib->k[j+1];
+                sib->v[j] = sib->v[j+1];
+                sib->c[j] = sib->c[j+1];
+            }
+            sib->k[sib->n] = INVALID_SENTINEL;
+            sib->v[sib->n] = INVALID_SENTINEL;
+            sib->c[sib->n] = sib->c[sib->n+1];
+            sib->c[sib->n+1] = NULL;
+        } else if (i > 0 && x->c[i-1]->n >= x->t) {
+            // Case 3a: Immediate sibling (left) has at least t keys
+            node_t * sib = x->c[i-1];
+
+            // Give x->c[i] an extra key/value from x->k.
+            child->k[child->n] = x->k[i];
+            child->v[child->n] = x->v[i];
+            child->n++;
+
+            // Give x a key/value from left sibling.
+            x->k[i] = x->k[i-1];
+            x->v[i] = x->v[i-1];
+            x->k[i-1] = sib->k[sib->n-1];
+            x->v[i-1] = sib->v[sib->n-1];
+
+            // Move child pointer from left sibling into child.
+            child->c[0] = sib->c[sib->n];
+            
+            // Clear last key/value slot in left sibling.
+            sib->n--;
+            sib->k[sib->n] = INVALID_SENTINEL;
+            sib->v[sib->n] = INVALID_SENTINEL;
+            sib->c[sib->n+1] = NULL;
+        } else if(i <= x->n) {
+            // Case 3b: All immediate siblings have t-1 keys, merge with right
+            node_t * sib = x->c[i+1];
+
+            child->k[child->n] = x->k[i];
+            child->v[child->n] = x->v[i];
+            child->n++;
+
+            for(j = 0; j < sib->n; j++, child->n++) {
+                child->k[child->n] = sib->k[j];
+                child->v[child->n] = sib->v[j];
+                child->c[child->n] = sib->c[j];
+            }
+            child->c[child->n] = sib->c[j];
+
+            for(j = x->n-1; j > i; j--) {
+                x->k[j-1] = x->k[j];
+                x->v[j-1] = x->v[j];
+                x->c[j] = x->c[j+1];
+            }
+            x->n--;
+
+            x->k[x->n] = INVALID_SENTINEL;
+            x->v[x->n] = INVALID_SENTINEL;
+            x->c[x->n+1] = NULL;
+
+            free(sib);
         } else {
-            // TODO Case 3b: All immediate siblings have t-1 keys
-            munit_log(MUNIT_LOG_INFO, "\tTODO Case 3b: immediate sibling n == t-1");
+            // Case 3b: All immediate siblings have t-1 keys, merge with left
+            node_t * sib = x->c[i-1];
+
+            child->k[child->n] = x->k[i];
+            child->v[child->n] = x->v[i];
+            child->n++;
+
+            for(j = 0; j < child->n; j++, sib->n++) {
+                sib->k[sib->n] = child->k[j];
+                sib->v[sib->n] = child->v[j];
+                sib->c[sib->n] = child->c[j];
+            }
+            sib->c[sib->n] = child->c[j];
+
+            for(j = x->n-1; j > i; j--) {
+                x->k[j-1] = x->k[j];
+                x->v[j-1] = x->v[j];
+                x->c[j] = x->c[j+1];
+            }
+            x->n--;
+
+            x->k[x->n] = INVALID_SENTINEL;
+            x->v[x->n] = INVALID_SENTINEL;
+            x->c[x->n+1] = NULL;
+
+            free(sib);
         }
     }
 
-    munit_logf(MUNIT_LOG_INFO, "\tCase 3: recurse %d", i);
-    btree_delete(x->c[i], k);
-    munit_logf(MUNIT_LOG_INFO, "\tCase 3: back from recurse %d", i);
+    btree_delete_from_subtree(x->c[i], k);
 }
 
 void btree_destroy(btree_t * T) {

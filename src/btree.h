@@ -72,12 +72,12 @@ btree_t * btree_create(uint16_t t);
  * present, and re-balances the B-tree in O(log n) time (if necessary). Does
  * nothing if key is not present or is INVALID_SENTINEL.
  * 
- * @param x Root node of B-tree to remove from
+ * @param T B-tree to remove from
  * @param k Key to remove; associated value will be removed as well
  * 
  * @see btree_insert()
  */
-void btree_delete(node_t * x, uint64_t k);
+void btree_delete(btree_t * T, uint64_t k);
 
 /**
  * @brief Recursively destroys a B-tree and frees associated memory.
