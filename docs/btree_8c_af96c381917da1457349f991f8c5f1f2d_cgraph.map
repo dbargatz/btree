@@ -1,0 +1,5 @@
+<map id="btree_insert_nonfull" name="btree_insert_nonfull">
+<area shape="rect" id="node2" href="$btree_8c.html#a79dcf6ff79787fbaefe2eac1c4ffb710" title="Splits a full node around the given index and re&#45;balances the local portion of the B&#45;tree..." alt="" coords="201,5,327,32"/>
+<area shape="rect" id="node3" href="$btree_8c.html#afacfdf142674bd5239cfb96e6168fb0d" title="Allocates contiguous space for an internal B&#45;tree node; exposed for testing purposes only..." alt="" coords="375,5,485,32"/>
+<area shape="rect" id="node4" href="$btree_8c.html#a8504be40bcc454a2d3bace2941bfd497" title="Sets the __n uint64_t&#39;s pointed to by __s to __c. Internal function. " alt="" coords="533,5,625,32"/>
+</map>

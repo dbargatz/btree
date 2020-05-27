@@ -1,0 +1,3 @@
+<map id="btree_delete_from_subtree" name="btree_delete_from_subtree">
+<area shape="rect" id="node2" href="$btree_8h.html#a744e672732a9d4fdb8233771dbb5ffff" title="Removes the given key and associated value from the B&#45;tree, if present, and re&#45;balances the B&#45;tree in..." alt="" coords="249,5,352,32"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="btree_delete" name="btree_delete">
+<area shape="rect" id="node2" href="$btree_8c.html#ae45c338815dac127449fc954caf0a62f" title="Removes the given key and associated value from the subtree rooted at the given node, if present, and re&#45;balances the B&#45;tree in O(log n) time (if necessary). Does nothing if key is not present or is INVALID_SENTINEL. " alt="" coords="156,5,352,32"/>
+<area shape="rect" id="node3" href="$btree_8c.html#a7f63200553c20563465b1b691d1d187a" title="Recursively frees a node and its child nodes (if any). Internal function. " alt="" coords="400,31,509,57"/>
+</map>

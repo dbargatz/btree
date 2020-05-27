@@ -1,0 +1,6 @@
+<map id="allocate_node" name="allocate_node">
+<area shape="rect" id="node2" href="$btree_8h.html#a012d6447765287b425dfb7fc323e4a63" title="Allocates a B&#45;tree of minimum degree t and root node. " alt="" coords="175,5,279,32"/>
+<area shape="rect" id="node3" href="$btree_8h.html#acbcabd38a2a3ce2e127570e952c3d17d" title="Inserts a given key/value pair into a B&#45;tree, re&#45;balancing the B&#45;tree in O(log n) time (if necessary)..." alt="" coords="533,107,632,133"/>
+<area shape="rect" id="node4" href="$btree_8c.html#a79dcf6ff79787fbaefe2eac1c4ffb710" title="Splits a full node around the given index and re&#45;balances the local portion of the B&#45;tree..." alt="" coords="164,107,289,133"/>
+<area shape="rect" id="node5" href="$btree_8c.html#af96c381917da1457349f991f8c5f1f2d" title="Inserts a key/value pair into a leaf node, recursing through internal nodes and splitting full nodes ..." alt="" coords="337,157,485,184"/>
+</map>

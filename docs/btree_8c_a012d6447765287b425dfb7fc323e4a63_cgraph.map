@@ -1,0 +1,4 @@
+<map id="btree_create" name="btree_create">
+<area shape="rect" id="node2" href="$btree_8c.html#afacfdf142674bd5239cfb96e6168fb0d" title="Allocates contiguous space for an internal B&#45;tree node; exposed for testing purposes only..." alt="" coords="157,5,268,32"/>
+<area shape="rect" id="node3" href="$btree_8c.html#a8504be40bcc454a2d3bace2941bfd497" title="Sets the __n uint64_t&#39;s pointed to by __s to __c. Internal function. " alt="" coords="316,5,408,32"/>
+</map>

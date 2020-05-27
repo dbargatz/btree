@@ -1,0 +1,5 @@
+<map id="destroy_node" name="destroy_node">
+<area shape="rect" id="node2" href="$btree_8h.html#a744e672732a9d4fdb8233771dbb5ffff" title="Removes the given key and associated value from the B&#45;tree, if present, and re&#45;balances the B&#45;tree in..." alt="" coords="407,5,509,32"/>
+<area shape="rect" id="node3" href="$btree_8c.html#ae45c338815dac127449fc954caf0a62f" title="Removes the given key and associated value from the subtree rooted at the given node, if present, and re&#45;balances the B&#45;tree in O(log n) time (if necessary). Does nothing if key is not present or is INVALID_SENTINEL. " alt="" coords="163,31,359,57"/>
+<area shape="rect" id="node4" href="$btree_8h.html#a94c853d7c59b845dff9b8b1cef2b35a7" title="Recursively destroys a B&#45;tree and frees associated memory. " alt="" coords="205,81,316,108"/>
+</map>
