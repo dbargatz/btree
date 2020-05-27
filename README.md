@@ -5,6 +5,10 @@
 An implementation of a B-Tree in C which closely follows the implementation
 described in CLRS<sup>[1](#clrs)</sup>.
 
+## Documentation
+
+Doxygen-generated documentation is located at <https://dbargatz.me/btree.>
+
 ## Differences
 
 This implementation differs from the book in a few important ways:
