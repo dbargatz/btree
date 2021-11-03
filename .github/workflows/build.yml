@@ -32,13 +32,13 @@ jobs:
     - name: Run ./configure
       run: ./configure
 
-    # Generate the ninja build files with meson.
+    # Generate the ninja build files with meson. Ensure clang is the compiler.
     - name: Generate build
-      run: meson setup build
+      run: CC=/usr/bin/clang meson setup build
 
     # Actually perform the build.
     - name: Run the build
-      run: cd build/ && ninja
+      run: meson compile -v -C build/
       
     # Generate the doxygen documentation.
     - name: Generate docs
