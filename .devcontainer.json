@@ -18,5 +18,4 @@
 	"runArgs": [
 		"--init"
 	],
-	"remoteUser": "vscode"
 }

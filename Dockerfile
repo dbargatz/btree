@@ -6,8 +6,11 @@ RUN set -x \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y update \
     && apt-get -y install --no-install-recommends \
+        clang \
+        cmake \
         doxygen \
         graphviz \
+        pkg-config \
         python3 \
         python3-pip \
     && apt-get clean \
