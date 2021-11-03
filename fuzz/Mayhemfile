@@ -1,0 +1,7 @@
+version: '1.15'
+baseimage: $MAYHEM_DOCKER_REGISTRY/dbargatz/btree:latest
+project: btree
+target: btree-insert
+cmds:
+  - cmd: /btree_fuzz
+    libfuzzer: true
