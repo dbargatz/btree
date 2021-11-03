@@ -24,7 +24,12 @@ RUN set -x \
 
 FROM base AS fuzz
 WORKDIR /workspaces/btree
+ENV PATH=/root/.local/bin:${PATH}
 COPY . .
 RUN set -x \
     && meson build \
+    && meson compile -v -C build/ \
+    && cp build/btree_fuzz /btree_fuzz \
+    && rm -rf /workspaces/btree
 
+WORKDIR /
